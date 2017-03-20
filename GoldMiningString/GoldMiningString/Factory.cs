@@ -14,6 +14,18 @@ namespace GoldMiningString
         static object thisLock = new object();
         static int goldAmount;
 
+        public static int GoldAmount
+        {
+            get
+            {
+                return goldAmount;
+            }
+            set
+            {
+                goldAmount = value;
+            }
+        }
+
         public Factory(Vector2 position, string spriteName, float scale) : base(position, spriteName, scale)
         {
             goldAmount = 0;
@@ -24,10 +36,11 @@ namespace GoldMiningString
             lock (thisLock)
             {
                 Thread.Sleep(500);
-                w.GoldAmount = 0;
-                w.Position = new Vector2(w.Position.X - 40, w.Position.Y);
+                w.Position = new Vector2(w.Position.X + 40, w.Position.Y);
+                w.Position = new Vector2(770, 200);
                 Thread.Sleep(1000);
-                goldAmount += 20;
+                w.GoldAmount = 0;
+                goldAmount += w.GoldAmount;
                 w.Position = new Vector2(w.Position.X + 40, w.Position.Y + 30);
             }
         }
@@ -39,5 +52,5 @@ namespace GoldMiningString
         }
     }
 
-  }
+}
 
