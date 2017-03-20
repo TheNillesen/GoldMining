@@ -68,7 +68,7 @@ namespace GoldMiningString
             this.label = label;
             currentAction = Action.WorkLeft;
             goldAmount = 0;
-            speed = GameWorld.Instance.Rnd.Next(40, 100);
+            speed = GameWorld.Instance.Rnd.Next(50, 80);
             wThread = new Thread(Move);
             wThread.IsBackground = true;
             wThread.Start();
@@ -81,7 +81,7 @@ namespace GoldMiningString
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(GameWorld.Instance.BFont, label + " $" + goldAmount.ToString(), new Vector2(position.X, position.Y - 10), Color.DarkRed);
-            spriteBatch.DrawString(GameWorld.Instance.BFont, speed.ToString(), new Vector2(position.X - 10, position.Y), Color.DarkBlue);
+           // spriteBatch.DrawString(GameWorld.Instance.BFont, speed.ToString(), new Vector2(position.X - 10, position.Y), Color.DarkBlue);
             base.Draw(spriteBatch);
         }
         public void Move()
