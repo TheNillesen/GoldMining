@@ -16,21 +16,55 @@ namespace GoldMiningString
         static object thisLock = new object();
 
         public Mine(Vector2 position, string spriteName, float scale) : base(position, spriteName, scale)
-        {
+        { }
 
-        }
-
-
-        //semaphore
+        // Semaphore
         public static void GetGold1(Worker w)
         {
             sp.WaitOne();
             Thread.Sleep(500);
+            w.Position = new Vector2(w.Position.X - 40, w.Position.Y);
+            w.GoldAmount = GameWorld.Instance.Rnd.Next(10, 30);
+            Thread.Sleep(2000);
+            w.Position = new Vector2(w.Position.X + 40, w.Position.Y - 30);
+            sp.Release();
+        }
+        // Lock
+        public static void GetGold2(Worker w)
+        {
+            lock (thisLock)
+            {
+                Thread.Sleep(500);
+                w.GoldAmount = 20;
+                w.Position = new Vector2(w.Position.X + 40, w.Position.Y);
+                Thread.Sleep(1000);
+            }
+        }
+        //Monitor
+        public static void GetGold3(Worker w)
+        {
+            Monitor.Enter(thisLock);
+            try
+            {
+                Thread.Sleep(500);
+                w.GoldAmount = 20;
+                w.Position = new Vector2(w.Position.X + 40, w.Position.Y);
+                Thread.Sleep(1000);
+            }
+            finally
+            {
+                Monitor.Exit(thisLock);
+            }
+        }
+        // Mutex
+        public static void GetGold4(Worker w)
+        {
+            mtx.WaitOne();
+            Thread.Sleep(500);
             w.Position = new Vector2(w.Position.X + 40, w.Position.Y);
             w.GoldAmount = 20;
-            Thread.Sleep(2000);
-            w.Position = new Vector2(w.Position.X - 40, w.Position.Y - 30);
-            sp.Release();
+            Thread.Sleep(1000);
+            mtx.ReleaseMutex();
         }
     }
 }

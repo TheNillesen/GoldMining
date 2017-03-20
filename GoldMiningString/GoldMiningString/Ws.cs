@@ -14,9 +14,7 @@ namespace GoldMiningString
         static object thisLock = new object();
 
         public Ws(Vector2 position, string spriteName, float scale) : base(position, spriteName, scale)
-        {
-
-        }
+        { }
 
         public static void useWs(Worker w)
         {
@@ -24,8 +22,10 @@ namespace GoldMiningString
             Thread.Sleep(500);
             w.Position = new Vector2(w.Position.X, w.Position.Y + 60);
             Thread.Sleep(2000);
-            w.Position = new Vector2(w.Position.X + 15, w.Position.Y - 60);
+            w.Position = new Vector2(w.Position.X - 15, w.Position.Y - 60);
             mtx.ReleaseMutex();
         }
+
+
     }
 }
