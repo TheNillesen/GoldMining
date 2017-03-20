@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GoldMiningString
 {
-    enum Action { WorkForward, WorkBack, UseWsForward, UseWsBack };
+    enum Action { WorkRight, WorkLeft, UseWsForward, UseWsBack };
 
     class Worker : GameObject
     {
@@ -63,17 +63,15 @@ namespace GoldMiningString
         /// <summary>
         /// The GameObject's constructor
         /// </summary>
-
-        public Worker(Vector2 position, string spriteName, float scale, string lable) : base(position, spriteName, scale)
+        public Worker(Vector2 position, string spriteName, float scale, string label) : base(position, spriteName, scale)
         {
             this.label = label;
-            currentAction = Action.WorkForward;
+            currentAction = Action.WorkLeft;
             goldAmount = 0;
             speed = GameWorld.Instance.Rnd.Next(40, 100);
             wThread = new Thread(Move);
             wThread.IsBackground = true;
             wThread.Start();
-
         }
 
         /// <summary>
@@ -86,7 +84,6 @@ namespace GoldMiningString
             spriteBatch.DrawString(GameWorld.Instance.BFont, speed.ToString(), new Vector2(position.X - 10, position.Y), Color.DarkBlue);
             base.Draw(spriteBatch);
         }
-
         public void Move()
         {
 
@@ -96,33 +93,33 @@ namespace GoldMiningString
             {
                 switch (currentAction)
                 {
-                    case Action.WorkForward:
+                    case Action.WorkLeft:
                         {
-                            if (position.X >= 820)
+                            if (position.X <= 330)
                             {
                                 //Thread.Sleep(1000);
                                 Mine.GetGold1(this);
-                                currentAction = Action.WorkBack;
-                            }
-                            else
-                            {
-                                translation = Vector2.Zero;
-                                translation += new Vector2(1, 0);
-                                Thread.Sleep(10);
-                            }
-                        }
-                        break;
-                    case Action.WorkBack:
-                        {
-                            if (position.X <= 400)
-                            {
-                                Factory.ReleaseGold(this);
-                                currentAction = GameWorld.Instance.Rnd.Next(0, 10) > 3 ? Action.WorkForward : Action.UseWsForward;
+                                currentAction = Action.WorkRight;
                             }
                             else
                             {
                                 translation = Vector2.Zero;
                                 translation += new Vector2(-1, 0);
+                                Thread.Sleep(10);
+                            }
+                        }
+                        break;
+                    case Action.WorkRight:
+                        {
+                            if (position.X >= 750)
+                            {
+                                Factory.ReleaseGold(this);
+                                currentAction = GameWorld.Instance.Rnd.Next(0, 10) > 3 ? Action.WorkLeft : Action.UseWsForward;
+                            }
+                            else
+                            {
+                                translation = Vector2.Zero;
+                                translation += new Vector2(1, 0);
                                 Thread.Sleep(500 / speed);
                             }
                         }
@@ -147,7 +144,7 @@ namespace GoldMiningString
                         {
                             if (position.Y <= GameWorld.Instance.Rnd.Next(150, 250))
                             {
-                                currentAction = Action.WorkForward;
+                                currentAction = Action.WorkLeft;
                             }
                             else
                             {
@@ -161,6 +158,5 @@ namespace GoldMiningString
                 position += translation * speed / 100;
             }
         }
-
     }
 }
