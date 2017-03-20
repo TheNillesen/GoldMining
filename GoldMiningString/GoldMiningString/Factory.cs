@@ -14,6 +14,19 @@ namespace GoldMiningString
         static object thisLock = new object();
         static int goldAmount;
 
+        public static int GoldAmount
+        {
+            get
+            {
+                return goldAmount;
+            }
+
+            set
+            {
+                goldAmount = value;
+            }
+        }
+
         public Factory(Vector2 position, string spriteName, float scale) : base(position, spriteName, scale)
         {
             goldAmount = 0;
@@ -24,20 +37,24 @@ namespace GoldMiningString
             lock (thisLock)
             {
                 Thread.Sleep(500);
-                w.GoldAmount = 0;
-                w.Position = new Vector2(w.Position.X - 40, w.Position.Y);
+
+                w.Position = new Vector2(w.Position.X + 40, w.Position.Y);
+                w.Position = new Vector2(770, 200);
                 Thread.Sleep(1000);
-                goldAmount += 20;
-                w.Position = new Vector2(w.Position.X + 40, w.Position.Y + 30);
+                goldAmount += w.GoldAmount;
+                w.GoldAmount = 0;
+                w.Position = new Vector2(740, GameWorld.Instance.Rnd.Next(240, 270));
             }
         }
-
-            public override void Draw(SpriteBatch spriteBatch)
+        /// <summary>
+        /// Draws the GameObject
+        /// </summary>
+        /// <param name="spriteBatch">The spritebatch from our GameWorld</param>
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(GameWorld.Instance.BFont, "$ " + goldAmount.ToString(), new Vector2 (position.X, position.Y + 5), Color.DarkBlue);
+            spriteBatch.DrawString(GameWorld.Instance.BFont, "$ " + goldAmount.ToString(), new Vector2(position.X, position.Y + 5), Color.DarkBlue);
             base.Draw(spriteBatch);
         }
     }
-
-  }
+}
 
