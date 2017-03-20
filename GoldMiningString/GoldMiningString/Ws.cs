@@ -13,7 +13,7 @@ namespace GoldMiningString
         static Mutex mtx = new Mutex();
         static object thisLock = new object();
 
-        public Ws(Vector2 postion, string spriteName, float scale) : base(position, spriteName, scale)
+        public Ws(Vector2 position, string spriteName, float scale) : base(position, spriteName, scale)
         {
 
         }
