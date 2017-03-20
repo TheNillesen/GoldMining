@@ -143,7 +143,8 @@ namespace GoldMiningString
             {
                 go.Draw(spriteBatch);
             }
-            spriteBatch.DrawString(bFont, "[R] - 100$ to recruit worker", new Vector2(10, 200), Color.Black);
+            spriteBatch.DrawString(bFont, "Workers: "+ number, new Vector2(10, 100), Color.Black);
+            spriteBatch.DrawString(bFont, "[R] - to recruit worker", new Vector2(10, 200), Color.Black);
             spriteBatch.DrawString(bFont, "[F] - to fire worker", new Vector2(10, 230), Color.Black);
             spriteBatch.DrawString(bFont, "[P] - pause", new Vector2(10, 260), Color.Black);
             spriteBatch.DrawString(bFont, "[C] - resume game", new Vector2(10, 280), Color.Black);
@@ -158,6 +159,7 @@ namespace GoldMiningString
             {
                 GameObject go = new Worker(new Vector2(rnd.Next(1000, 1100), rnd.Next(200, 250)), "man", 0.3f, number.ToString());
                 go.LoadContent(Content);
+
                 gameObjects.Add(go);
                 number++;
                 //Factory.GoldAmount -= 100;
