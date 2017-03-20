@@ -17,6 +17,7 @@ namespace GoldMiningString
         private static GameWorld instance;
         private List<GameObject> gameObjects;
         SpriteFont bFont;
+        SpriteFont aFont;
         int number; // amount of workers
         Random rnd;
         bool canAddWorker;
@@ -48,6 +49,14 @@ namespace GoldMiningString
             get
             {
                 return rnd;
+            }
+        }
+
+        public SpriteFont AFont
+        {
+            get
+            {
+                return aFont;
             }
         }
 
@@ -96,6 +105,7 @@ namespace GoldMiningString
 
             // TODO: use this.Content to load your game content here
             bFont = Content.Load<SpriteFont>("BFont");
+            aFont = Content.Load<SpriteFont>("AFont");
             foreach (GameObject go in gameObjects)
             {
                 go.LoadContent(Content);

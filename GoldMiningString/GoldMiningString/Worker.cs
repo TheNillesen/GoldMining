@@ -80,7 +80,7 @@ namespace GoldMiningString
         /// <param name="spriteBatch">The spritebatch from our GameWorld</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(GameWorld.Instance.BFont, label + " $" + goldAmount.ToString(), new Vector2(position.X, position.Y - 10), Color.DarkRed);
+            spriteBatch.DrawString(GameWorld.Instance.AFont, label + " $" + goldAmount.ToString(), new Vector2(position.X, position.Y - 10), Color.DarkRed);
            // spriteBatch.DrawString(GameWorld.Instance.BFont, speed.ToString(), new Vector2(position.X - 10, position.Y), Color.DarkBlue);
             base.Draw(spriteBatch);
         }
