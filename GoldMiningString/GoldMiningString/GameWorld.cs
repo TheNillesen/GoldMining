@@ -158,6 +158,7 @@ namespace GoldMiningString
             {
                 GameObject go = new Worker(new Vector2(rnd.Next(1000, 1100), rnd.Next(200, 250)), "man", 0.3f, number.ToString());
                 go.LoadContent(Content);
+
                 gameObjects.Add(go);
                 number++;
                 //Factory.GoldAmount -= 100;

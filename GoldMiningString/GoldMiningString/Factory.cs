@@ -20,7 +20,6 @@ namespace GoldMiningString
             {
                 return goldAmount;
             }
-
             set
             {
                 goldAmount = value;
