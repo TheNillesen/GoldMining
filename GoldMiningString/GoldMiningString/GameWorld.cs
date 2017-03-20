@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
+using System.Collections.Generic;   
 
 namespace GoldMiningString
 {
@@ -152,7 +152,7 @@ namespace GoldMiningString
         {
             if (Keyboard.GetState().IsKeyDown(Keys.R) && canAddWorker && gameObjects.Count <= 30)
             {
-                GameObject go = new Worker(new Vector2(rnd.Next(200, 300), rnd.Next(200, 250)), "man", 0.3f, number.ToString());
+                GameObject go = new Worker(new Vector2(rnd.Next(1000, 1100), rnd.Next(200, 250)), "man", 0.3f, number.ToString());
                 go.LoadContent(Content);
                 gameObjects.Add(go);
                 number++;
