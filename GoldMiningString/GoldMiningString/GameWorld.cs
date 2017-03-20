@@ -143,6 +143,7 @@ namespace GoldMiningString
             {
                 go.Draw(spriteBatch);
             }
+            spriteBatch.DrawString(bFont, "Workers: "+ number, new Vector2(10, 100), Color.Black);
             spriteBatch.DrawString(bFont, "[R] - to recruit worker", new Vector2(10, 200), Color.Black);
             spriteBatch.DrawString(bFont, "[F] - to fire worker", new Vector2(10, 230), Color.Black);
             spriteBatch.DrawString(bFont, "[P] - pause", new Vector2(10, 260), Color.Black);
