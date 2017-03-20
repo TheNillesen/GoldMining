@@ -34,10 +34,10 @@ namespace GoldMiningString
 
             public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(GameWorld.Instance.BFont, "$ " + goldAmount.ToString(), new Vector2 Vector2(position.X, position.Y + 5), Color.DarkBlue);
+            spriteBatch.DrawString(GameWorld.Instance.BFont, "$ " + goldAmount.ToString(), new Vector2 (position.X, position.Y + 5), Color.DarkBlue);
             base.Draw(spriteBatch);
         }
     }
 
-    }
-}
+  }
+
