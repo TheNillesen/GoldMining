@@ -38,6 +38,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Bank.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="GameWorld.cs" />

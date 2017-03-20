@@ -85,6 +85,7 @@ namespace GoldMiningString
             gameObjects.Add(new Mine(new Vector2(200, 240), "ore", 0.6f));
             gameObjects.Add(new Factory(new Vector2(670, 50), "factory", 0.7f));
             gameObjects.Add(new Ws(new Vector2(700, 500), "ws", 0.2f));
+            //gameObjects.Add(new Bank(new Vector2(200, 400), "bank", 0.9f));
             for (int i = 0; i < 5; i++)
             {
                 number++;

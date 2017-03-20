@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GoldMiningString
 {
-    enum Action { WorkRight, WorkLeft, UseWsForward, UseWsBack };
+    enum Action { WorkRight, WorkLeft, UseWsForward, UseWsBack, UseBankForward, UseBankBack };
 
     class Worker : GameObject
     {
@@ -154,6 +154,36 @@ namespace GoldMiningString
                             }
                         }
                         break;
+                    //case Action.UseBankForward:
+                    //    {
+                    //        if (position.Y >= 240)
+                    //        {
+                    //            //Thread.Sleep(1000);
+                    //            Bank.DepositPayment(this);
+                    //            currentAction = Action.UseBankBack;
+                    //        }
+                    //        else
+                    //        {
+                    //            translation = Vector2.Zero;
+                    //            translation += new Vector2(4, 4);
+                    //            Thread.Sleep(500 / speed);
+                    //        }
+                    //    }
+                    //    break;
+                    //case Action.UseBankBack:
+                    //    {
+                    //        if (position.Y <= GameWorld.Instance.Rnd.Next(150, 250))
+                    //        {
+                    //            currentAction = Action.WorkLeft;
+                    //        }
+                    //        else
+                    //        {
+                    //            translation = Vector2.Zero;
+                    //            translation += new Vector2(-4, -4);
+                    //            Thread.Sleep(500 / speed);
+                    //        }
+                    //    }
+                    //    break;
                 }
                 position += translation * speed / 100;
             }
