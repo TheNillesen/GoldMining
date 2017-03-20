@@ -38,10 +38,14 @@ namespace GoldMiningString
         {
             sprite = content.Load<Texture2D>(spriteName);
         }
-        public void update()
+        public virtual void update()
         {
             //blank untill we fire something in there
         }
 
+        public virtual void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(sprite, position, null, Color.White, 0f, new Vector2(0, 0), scale, SpriteEffects.None, 1);
+        }
     }
 }
