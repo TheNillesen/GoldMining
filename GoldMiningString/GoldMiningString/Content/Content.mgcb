@@ -62,7 +62,8 @@
 /build:ws.png
 
 #begin BFont
-/importer:
-/processor:
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
 /build:BFont
 
