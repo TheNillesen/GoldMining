@@ -165,7 +165,7 @@ namespace GoldMiningString
         }
         public void AddWorker()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.R) && canAddWorker && gameObjects.Count <= 40 && Factory.GoldAmount >= 0)
+            if (Keyboard.GetState().IsKeyDown(Keys.R) && canAddWorker && gameObjects.Count <= 40 && Factory.GoldAmount >= 0 && !isPaused)
             {
                 GameObject go = new Worker(new Vector2(rnd.Next(900, 1000), rnd.Next(240, 270)), "man", 0.3f, number.ToString());
                 go.LoadContent(Content);
