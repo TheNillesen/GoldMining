@@ -85,7 +85,7 @@ namespace GoldMiningString
             rnd = new Random();
             firstStart = true;
             isPaused = true;
-            min = 5;
+            min = 15;
             sec = 0;
             number = 0;
             canAddWorker = true;
