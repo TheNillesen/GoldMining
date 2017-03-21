@@ -22,7 +22,12 @@ namespace GoldMiningString
         Random rnd;
         bool canAddWorker;
         bool canDeleteWorker;
+        bool canRestart;
         bool isPaused;
+        bool firstStart;
+        float min, sec;
+        float deltaTime;
+        bool playGame;
 
         public static GameWorld Instance
         {
@@ -78,9 +83,15 @@ namespace GoldMiningString
         {
             // TODO: Add your initialization logic here
             rnd = new Random();
+            firstStart = true;
+            isPaused = true;
+            min = 5;
+            sec = 0;
             number = 0;
             canAddWorker = true;
             canDeleteWorker = true;
+            canRestart = true;
+            playGame = true;
             gameObjects = new List<GameObject>();
             gameObjects.Add(new Mine(new Vector2(200, 240), "ore", 0.6f));
             gameObjects.Add(new Factory(new Vector2(670, 50), "factory", 0.7f));
@@ -88,7 +99,7 @@ namespace GoldMiningString
             for (int i = 0; i < 5; i++)
             {
                 number++;
-                gameObjects.Add(new Worker(new Vector2(rnd.Next(900, 1000), rnd.Next(240, 270)), "man", 0.3f, number.ToString()));
+                gameObjects.Add(new Worker(new Vector2(rnd.Next(900, 1000), rnd.Next(260, 280)), "man", 0.3f, number.ToString()));
             }
 
             base.Initialize();
@@ -132,9 +143,16 @@ namespace GoldMiningString
                 Exit();
 
             // TODO: Add your update logic here
-            AddWorker();
-            DeleteWorker();
-            StartStop();
+            deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (playGame)
+            {
+                if (!isPaused)
+                    UpdateTimer();
+                AddWorker();
+                DeleteWorker();
+                StartStop();
+            }
+            RestartGame();
 
             base.Update(gameTime);
         }
@@ -153,30 +171,43 @@ namespace GoldMiningString
             {
                 go.Draw(spriteBatch);
             }
-            spriteBatch.DrawString(bFont, "Workers: "+ number, new Vector2(10, 100), Color.Black);
-            spriteBatch.DrawString(bFont, "[R] - to recruit worker", new Vector2(10, 200), Color.Black);
+            spriteBatch.DrawString(bFont, "Workers: " + number, new Vector2(10, 100), Color.Black);
+            spriteBatch.DrawString(bFont, "[A] - to recruit worker", new Vector2(10, 200), Color.Black);
             spriteBatch.DrawString(bFont, "[F] - to fire worker", new Vector2(10, 230), Color.Black);
             spriteBatch.DrawString(bFont, "[P] - pause", new Vector2(10, 260), Color.Black);
-            spriteBatch.DrawString(bFont, "[C] - resume game", new Vector2(10, 280), Color.Black);
-
+            spriteBatch.DrawString(bFont, "[S] - start / resume game", new Vector2(10, 280), Color.Black);
+            spriteBatch.DrawString(bFont, "[esc] - exit game", new Vector2(10, 530), Color.Black);
+            spriteBatch.DrawString(bFont, "[R] - restart game", new Vector2(10, 500), Color.Black);
+            spriteBatch.DrawString(bFont, string.Format("Time left: {0:00}:{1:00}", min, sec), new Vector2(10, 50), Color.Red);
+            if (firstStart)
+            {
+                spriteBatch.DrawString(bFont, "By workers and take care about the factory", new Vector2(400, 300), Color.Green);
+                spriteBatch.DrawString(bFont, "To buy a worker costs 100$", new Vector2(400, 330), Color.Green);
+                spriteBatch.DrawString(bFont, "Every worker kosts 10$/min", new Vector2(400, 360), Color.Green);
+            }
+            if (!playGame)
+                spriteBatch.DrawString(bFont, "Game over!", new Vector2(400, 360), Color.Red);
             spriteBatch.End();
 
             base.Draw(gameTime);
         }
         public void AddWorker()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.R) && canAddWorker && gameObjects.Count <= 40 && Factory.GoldAmount >= 0 && !isPaused)
+            if (Keyboard.GetState().IsKeyDown(Keys.A) && canAddWorker && gameObjects.Count <= 40 && Factory.GoldAmount >= 0 && !isPaused)
             {
-                GameObject go = new Worker(new Vector2(rnd.Next(900, 1000), rnd.Next(240, 270)), "man", 0.3f, number.ToString());
+                GameObject go = new Worker(new Vector2(rnd.Next(900, 1000), rnd.Next(260, 280)), "man", 0.3f, number.ToString());
                 go.LoadContent(Content);
-
+                (go as Worker).WThread = new Thread((go as Worker).Move);
+                (go as Worker).WThread.IsBackground = true;
+                (go as Worker).WThread.Start();
                 gameObjects.Add(go);
                 number++;
+                //if (Factory.GoldAmount >= 100)
                 //Factory.GoldAmount -= 100;
                 canAddWorker = false;
 
             }
-            if (Keyboard.GetState().IsKeyUp(Keys.R))
+            if (Keyboard.GetState().IsKeyUp(Keys.A))
             {
                 canAddWorker = true;
             }
@@ -184,7 +215,7 @@ namespace GoldMiningString
         }
         public void DeleteWorker()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.F) && canDeleteWorker && number > 0)
+            if (Keyboard.GetState().IsKeyDown(Keys.F) && canDeleteWorker && number > 0 && !isPaused)
             {
                 (gameObjects[gameObjects.Count - 1] as Worker).WThread.Abort();
                 gameObjects.RemoveAt(gameObjects.Count - 1);
@@ -198,7 +229,7 @@ namespace GoldMiningString
         }
         public void StartStop()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.C) && isPaused && number > 0)
+            if (Keyboard.GetState().IsKeyDown(Keys.S) && isPaused && number > 0 && playGame)
             {
                 foreach (GameObject go in gameObjects)
                 {
@@ -210,6 +241,7 @@ namespace GoldMiningString
                     }
                 }
                 isPaused = false;
+                if (firstStart) firstStart = false;
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.P) && !isPaused && number > 0)
             {
@@ -219,6 +251,81 @@ namespace GoldMiningString
                         (go as Worker).WThread.Abort();
                 }
                 isPaused = true;
+            }
+        }
+
+        public void UpdateTimer()
+        {
+            sec -= deltaTime;
+            if (sec < 0)
+            {
+                if ((min +sec) <= 0) playGame = false;
+                min--;       
+                sec = 59;
+                if (min < 14)
+                    CheckFactoryStatus();
+            }
+        }
+
+        public void CheckFactoryStatus()
+        {
+            if (Factory.GoldAmount >= number * 10)
+                Factory.GoldAmount -= number * 10;
+            else
+            {
+                Factory.GoldAmount = 0;
+                foreach (GameObject go in gameObjects)
+                {
+                    if (go is Worker)
+                        (go as Worker).WThread.Abort();
+                }
+                isPaused = true;
+                playGame = false;
+            }
+        }
+
+        public void RestartGame()
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.R) && canRestart)
+            {
+                if (number > 0)
+                {
+                    /*
+                    foreach (GameObject go in gameObjects)
+                    {
+                        if (go is Worker)
+                        {
+                            (go as Worker).WThread.Abort();
+                            gameObjects.Remove(go);
+                        }
+                    }*/
+                   while (number > 0)
+                    {
+                        (gameObjects[gameObjects.Count - 1] as Worker).WThread.Abort();
+                        gameObjects.RemoveAt(gameObjects.Count - 1);
+                        number--;
+                    }
+                }
+                //number = 0;
+                for (int i = 0; i < 5; i++)
+                {
+                    number++;
+                    GameObject go = new Worker(new Vector2(rnd.Next(900, 1000), rnd.Next(260, 280)), "man", 0.3f, number.ToString());
+                    go.LoadContent(Content);
+                    (go as Worker).WThread = new Thread((go as Worker).Move);
+                    (go as Worker).WThread.IsBackground = true;
+                    gameObjects.Add(go);
+                }
+                playGame = true;
+                isPaused = true;
+                min = 15;
+                sec = 0;
+                Factory.GoldAmount = 0;
+                canRestart = false;
+            }
+            if (Keyboard.GetState().IsKeyUp(Keys.R))
+            {
+                canRestart = true;
             }
         }
     }

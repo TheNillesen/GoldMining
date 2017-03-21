@@ -69,9 +69,9 @@ namespace GoldMiningString
             currentAction = Action.WorkLeft;
             goldAmount = 0;
             speed = GameWorld.Instance.Rnd.Next(50, 80);
-            wThread = new Thread(Move);
-            wThread.IsBackground = true;
-            wThread.Start();
+            //wThread = new Thread(Move);
+            //wThread.IsBackground = true;
+            //wThread.Start();
         }
 
         /// <summary>
@@ -80,8 +80,9 @@ namespace GoldMiningString
         /// <param name="spriteBatch">The spritebatch from our GameWorld</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(GameWorld.Instance.AFont, label + " $" + goldAmount.ToString(), new Vector2(position.X, position.Y - 10), Color.DarkRed);
-           // spriteBatch.DrawString(GameWorld.Instance.BFont, speed.ToString(), new Vector2(position.X - 10, position.Y), Color.DarkBlue);
+            spriteBatch.DrawString(GameWorld.Instance.AFont, goldAmount.ToString()+ "$", new Vector2(position.X + 10, position.Y - 10), Color.DarkRed);
+            spriteBatch.DrawString(GameWorld.Instance.AFont, label, new Vector2(position.X, position.Y - 5), Color.Blue);
+            // spriteBatch.DrawString(GameWorld.Instance.BFont, speed.ToString(), new Vector2(position.X - 10, position.Y), Color.DarkBlue);
             base.Draw(spriteBatch);
         }
         public void Move()
@@ -142,7 +143,7 @@ namespace GoldMiningString
                         break;
                     case Action.UseWsBack:
                         {
-                            if (position.Y <= GameWorld.Instance.Rnd.Next(150, 250))
+                            if (position.Y <= GameWorld.Instance.Rnd.Next(250, 270))
                             {
                                 currentAction = Action.WorkLeft;
                             }
