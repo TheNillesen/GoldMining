@@ -189,7 +189,7 @@ namespace GoldMiningString
             spriteBatch.DrawString(bFont, "[S] - start / resume game", new Vector2(10, 280), Color.Black);
             spriteBatch.DrawString(bFont, "[esc] - exit game", new Vector2(10, 530), Color.Black);
             spriteBatch.DrawString(bFont, "[R] - restart game", new Vector2(10, 500), Color.Black);
-            spriteBatch.DrawString(dFont, string.Format("Time left: {0:00}:{1:00}", min, sec), new Vector2(10, 50), Color.Red);
+            spriteBatch.DrawString(dFont, string.Format("Time left: {0:00}:{1:00}", min, sec), new Vector2(10, 30), Color.Red);
             if (firstStart)
             {
                 spriteBatch.DrawString(bFont, "Buy workers and take care about the factory", new Vector2(400, 300), Color.Green);
@@ -198,7 +198,7 @@ namespace GoldMiningString
                 spriteBatch.DrawString(bFont, "Have fun and Good luck with this amazing game", new Vector2(400, 390), Color.Green);
             }
             if (!playGame)
-                spriteBatch.DrawString(bFont, "Game over!", new Vector2(400, 360), Color.Red);
+                spriteBatch.DrawString(dFont, "GAME OVER!", new Vector2(400, 150), Color.Red);
             spriteBatch.End();
 
             base.Draw(gameTime);

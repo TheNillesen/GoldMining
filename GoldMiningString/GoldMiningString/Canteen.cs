@@ -19,10 +19,9 @@ namespace GoldMiningString
         {
             sp.WaitOne();
             Thread.Sleep(500);
-            w.Position = new Vector2(w.Position.X, w.Position.Y + 40);
-            w.GoldAmount = GameWorld.Instance.Rnd.Next(10, 30);
+            w.Position = new Vector2(GameWorld.Instance.Rnd.Next(540,570), GameWorld.Instance.Rnd.Next(500, 550));
             Thread.Sleep(2000);
-            w.Position = new Vector2(w.Position.X - 40, w.Position.Y - 40);
+            w.Position = new Vector2(530, 450);
             sp.Release();
         }
     }
