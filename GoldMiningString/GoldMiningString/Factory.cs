@@ -13,6 +13,7 @@ namespace GoldMiningString
     {
         static object thisLock = new object();
         static int goldAmount;
+        static Mutex mtx = new Mutex();
 
         public static int GoldAmount
         {
@@ -33,6 +34,23 @@ namespace GoldMiningString
 
         public static void ReleaseGold(Worker w)
         {
+            try
+            {
+                mtx.WaitOne();
+                w.Position = new Vector2(770, 200);
+                Thread.Sleep(2000);
+                goldAmount += w.GoldAmount;
+                w.GoldAmount = 0;
+                w.Position = new Vector2(740, GameWorld.Instance.Rnd.Next(240, 270));
+                mtx.ReleaseMutex();
+            }
+            catch (Exception)
+            {
+
+                mtx.ReleaseMutex();
+            }
+
+            /*
             lock (thisLock)
             {
                 Thread.Sleep(500);
@@ -43,7 +61,7 @@ namespace GoldMiningString
                 goldAmount += w.GoldAmount;
                 w.GoldAmount = 0;
                 w.Position = new Vector2(740, GameWorld.Instance.Rnd.Next(240, 270));
-            }
+            }*/
         }
         /// <summary>
         /// Draws the GameObject

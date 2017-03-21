@@ -99,7 +99,7 @@ namespace GoldMiningString
                             if (position.X <= 330)
                             {
                                 //Thread.Sleep(1000);
-                                Mine.GetGold4(this);
+                                Mine.GetGold2(this);
                                 currentAction = Action.WorkRight;
                             }
                             else if (position.X > 569 && position.X < 570)
