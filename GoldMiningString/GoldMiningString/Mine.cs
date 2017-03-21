@@ -61,9 +61,10 @@ namespace GoldMiningString
         {
             mtx.WaitOne();
             Thread.Sleep(500);
-            w.Position = new Vector2(w.Position.X + 40, w.Position.Y);
-            w.GoldAmount = 20;
-            Thread.Sleep(1000);
+            w.Position = new Vector2(w.Position.X - 70, w.Position.Y);
+            w.GoldAmount = GameWorld.Instance.Rnd.Next(10, 30);
+            Thread.Sleep(2000);
+            w.Position = new Vector2(w.Position.X + 70, w.Position.Y - 30);
             mtx.ReleaseMutex();
         }
     }
