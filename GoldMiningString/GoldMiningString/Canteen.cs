@@ -26,10 +26,9 @@ namespace GoldMiningString
                 w.Position = new Vector2(530, 450);
                 sp.Release();
             }
-            catch(Exception)
+            catch (Exception)
             {
                 sp.Release();
-
             }
         }
     }
