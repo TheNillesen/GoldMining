@@ -18,6 +18,7 @@ namespace GoldMiningString
         private List<GameObject> gameObjects;
         SpriteFont bFont;
         SpriteFont aFont;
+        SpriteFont dFont;
         int number; // amount of workers
         Random rnd;
         bool canAddWorker;
@@ -62,6 +63,13 @@ namespace GoldMiningString
             get
             {
                 return aFont;
+            }
+        }
+        public SpriteFont DFont
+        {
+            get
+            {
+                return dFont;
             }
         }
 
@@ -118,6 +126,7 @@ namespace GoldMiningString
             // TODO: use this.Content to load your game content here
             bFont = Content.Load<SpriteFont>("BFont");
             aFont = Content.Load<SpriteFont>("AFont");
+            dFont = Content.Load<SpriteFont>("DFont");
             foreach (GameObject go in gameObjects)
             {
                 go.LoadContent(Content);
@@ -179,12 +188,12 @@ namespace GoldMiningString
             spriteBatch.DrawString(bFont, "[S] - start / resume game", new Vector2(10, 280), Color.Black);
             spriteBatch.DrawString(bFont, "[esc] - exit game", new Vector2(10, 530), Color.Black);
             spriteBatch.DrawString(bFont, "[R] - restart game", new Vector2(10, 500), Color.Black);
-            spriteBatch.DrawString(bFont, string.Format("Time left: {0:00}:{1:00}", min, sec), new Vector2(10, 50), Color.Red);
+            spriteBatch.DrawString(dFont, string.Format("Time left: {0:00}:{1:00}", min, sec), new Vector2(10, 50), Color.Red);
             if (firstStart)
             {
-                spriteBatch.DrawString(bFont, "By workers and take care about the factory", new Vector2(400, 300), Color.Green);
+                spriteBatch.DrawString(bFont, "Buy workers and take care about the factory", new Vector2(400, 300), Color.Green);
                 spriteBatch.DrawString(bFont, "To buy a worker costs 100$", new Vector2(400, 330), Color.Green);
-                spriteBatch.DrawString(bFont, "Every worker kosts 10$/min", new Vector2(400, 360), Color.Green);
+                spriteBatch.DrawString(bFont, "Every worker costs 10$/min", new Vector2(400, 360), Color.Green);
             }
             if (!playGame)
                 spriteBatch.DrawString(bFont, "Game over!", new Vector2(400, 360), Color.Red);
