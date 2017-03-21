@@ -195,6 +195,7 @@ namespace GoldMiningString
                 spriteBatch.DrawString(bFont, "Buy workers and take care about the factory", new Vector2(400, 300), Color.Green);
                 spriteBatch.DrawString(bFont, "To buy a worker costs 100$", new Vector2(400, 330), Color.Green);
                 spriteBatch.DrawString(bFont, "Every worker costs 10$/min", new Vector2(400, 360), Color.Green);
+                spriteBatch.DrawString(bFont, "Have fun and Good luck with this amazing game", new Vector2(400, 390), Color.Green);
             }
             if (!playGame)
                 spriteBatch.DrawString(bFont, "Game over!", new Vector2(400, 360), Color.Red);
