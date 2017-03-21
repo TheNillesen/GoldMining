@@ -37,7 +37,7 @@ namespace GoldMiningString
             {
                 Thread.Sleep(500);
 
-                w.Position = new Vector2(w.Position.X + 40, w.Position.Y);
+               // w.Position = new Vector2(w.Position.X + 40, w.Position.Y);
                 w.Position = new Vector2(770, 200);
                 Thread.Sleep(1000);
                 goldAmount += w.GoldAmount;
