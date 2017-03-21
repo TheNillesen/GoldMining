@@ -35,7 +35,7 @@ namespace GoldMiningString
             lock (thisLock)
             {
                 Thread.Sleep(500);
-                w.Position = new Vector2(w.Position.X - 40, w.Position.Y);
+                w.Position = new Vector2(270, w.Position.Y);
                 w.GoldAmount = GameWorld.Instance.Rnd.Next(10, 30);
                 Thread.Sleep(2000);
                 w.Position = new Vector2(w.Position.X + 40, w.Position.Y - 30);

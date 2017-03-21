@@ -46,7 +46,6 @@ namespace GoldMiningString
             }
             catch (Exception)
             {
-
                 mtx.ReleaseMutex();
             }
 
