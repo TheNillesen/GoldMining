@@ -105,7 +105,7 @@ namespace GoldMiningString
             gameObjects.Add(new Factory(new Vector2(670, 50), "factory", 0.7f));
             gameObjects.Add(new Ws(new Vector2(700, 500), "ws", 0.2f));
             gameObjects.Add(new Canteen(new Vector2(450, 480), "canteen2", 0.5f));
-            //gameObjects.Add(new Bank(new Vector2(200, 400), "bank", 0.9f));
+            gameObjects.Add(new Bank(new Vector2(200, 400), "bank", 0.9f));
             for (int i = 0; i < 5; i++)
             {
                 number++;
@@ -195,6 +195,7 @@ namespace GoldMiningString
                 spriteBatch.DrawString(bFont, "Buy workers and take care about the factory", new Vector2(400, 300), Color.Green);
                 spriteBatch.DrawString(bFont, "To buy a worker costs 100$", new Vector2(400, 330), Color.Green);
                 spriteBatch.DrawString(bFont, "Every worker costs 10$/min", new Vector2(400, 360), Color.Green);
+                spriteBatch.DrawString(bFont, "Have fun and Good luck with this amazing game", new Vector2(400, 390), Color.Green);
             }
             if (!playGame)
                 spriteBatch.DrawString(bFont, "Game over!", new Vector2(400, 360), Color.Red);
