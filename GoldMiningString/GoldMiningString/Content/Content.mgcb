@@ -115,3 +115,9 @@
 /processorParam:TextureFormat=Color
 /build:canteen2.png
 
+#begin Jazz.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Jazz.wav
+
