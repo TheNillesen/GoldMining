@@ -85,6 +85,12 @@
 /processorParam:TextureFormat=Color
 /build:bank.png
 
+#begin Dfont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Dfont
+
 #begin thumbnail.png
 /importer:TextureImporter
 /processor:TextureProcessor
