@@ -44,6 +44,7 @@ namespace GoldMiningString
                 w.GoldAmount = 0;
                 w.Position = new Vector2(740, GameWorld.Instance.Rnd.Next(240, 270));
             }
+
         }
         /// <summary>
         /// Draws the GameObject
