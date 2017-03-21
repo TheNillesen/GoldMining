@@ -311,7 +311,7 @@ namespace GoldMiningString
 
         public void RestartGame()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.R) && canRestart)
+            if (Keyboard.GetState().IsKeyDown(Keys.R) && canRestart && !firstStart)
             {
                 if (number > 0)
                 {
@@ -347,6 +347,7 @@ namespace GoldMiningString
                 sec = 0;
                 Factory.GoldAmount = 0;
                 canRestart = false;
+                timerThread.Suspend();
             }
             if (Keyboard.GetState().IsKeyUp(Keys.R))
             {
