@@ -12,6 +12,7 @@ namespace GoldMiningString
     /// </summary>
     public class GameWorld : Game
     {
+        Thread timerThread;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private static GameWorld instance;
@@ -100,6 +101,8 @@ namespace GoldMiningString
             canDeleteWorker = true;
             canRestart = true;
             playGame = true;
+            timerThread = new Thread(UpdateTimer);
+            timerThread.IsBackground = true;
             gameObjects = new List<GameObject>();
             gameObjects.Add(new Mine(new Vector2(200, 240), "ore", 0.6f));
             gameObjects.Add(new Factory(new Vector2(670, 50), "factory", 0.7f));
@@ -157,8 +160,8 @@ namespace GoldMiningString
             deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (playGame)
             {
-                if (!isPaused)
-                    UpdateTimer();
+                //if (!isPaused)
+                  //  UpdateTimer();
                 AddWorker();
                 DeleteWorker();
                 StartStop();
@@ -253,7 +256,12 @@ namespace GoldMiningString
                     }
                 }
                 isPaused = false;
-                if (firstStart) firstStart = false;
+                if (firstStart)
+                {
+                    firstStart = false;
+                    timerThread.Start();
+                }
+                else timerThread.Resume();
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.P) && !isPaused && number > 0)
             {
@@ -263,19 +271,24 @@ namespace GoldMiningString
                         (go as Worker).WThread.Abort();
                 }
                 isPaused = true;
+                timerThread.Suspend();
             }
         }
 
         public void UpdateTimer()
         {
-            sec -= deltaTime;
-            if (sec < 0)
+            while (true)
             {
-                if ((min +sec) <= 0) playGame = false;
-                min--;       
-                sec = 59;
-                if (min < 14)
-                    CheckFactoryStatus();
+                Thread.Sleep(1000);
+                sec--;
+                if (sec < 0)
+                {
+                    if ((min + sec) <= 0) playGame = false;
+                    min--;
+                    sec = 59;
+                    if (min < 14)
+                        CheckFactoryStatus();
+                }
             }
         }
 
