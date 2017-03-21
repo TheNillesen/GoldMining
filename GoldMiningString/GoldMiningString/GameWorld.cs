@@ -12,6 +12,7 @@ namespace GoldMiningString
     /// </summary>
     public class GameWorld : Game
     {
+        
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private static GameWorld instance;
@@ -103,7 +104,7 @@ namespace GoldMiningString
             gameObjects = new List<GameObject>();
             gameObjects.Add(new Mine(new Vector2(200, 240), "ore", 0.6f));
             gameObjects.Add(new Factory(new Vector2(670, 50), "factory", 0.7f));
-            gameObjects.Add(new Ws(new Vector2(700, 500), "ws", 0.2f));
+            gameObjects.Add(new Wc(new Vector2(700, 500), "ws", 0.2f));
             gameObjects.Add(new Canteen(new Vector2(450, 480), "canteen2", 0.5f));
             // gameObjects.Add(new Bank(new Vector2(200, 400), "bank", 0.9f));
             for (int i = 0; i < 5; i++)
@@ -268,14 +269,18 @@ namespace GoldMiningString
 
         public void UpdateTimer()
         {
-            sec -= deltaTime;
-            if (sec < 0)
+            while(playGame)
             {
-                if ((min +sec) <= 0) playGame = false;
-                min--;       
-                sec = 59;
-                if (min < 14)
-                    CheckFactoryStatus();
+                Thread.Sleep(1000);
+                sec --;
+                if (sec < 0)
+                {
+                    if ((min + sec) <= 0) playGame = false;
+                    min--;
+                    sec = 59;
+                    if (min < 14)
+                        CheckFactoryStatus();
+                }
             }
         }
 

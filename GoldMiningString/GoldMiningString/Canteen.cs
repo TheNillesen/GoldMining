@@ -17,12 +17,20 @@ namespace GoldMiningString
 
         public static void UseCanteen(Worker w)
         {
-            sp.WaitOne();
-            Thread.Sleep(500);
-            w.Position = new Vector2(GameWorld.Instance.Rnd.Next(540,570), GameWorld.Instance.Rnd.Next(500, 550));
-            Thread.Sleep(2000);
-            w.Position = new Vector2(530, 450);
-            sp.Release();
+            try
+            {
+                sp.WaitOne();
+                Thread.Sleep(500);
+                w.Position = new Vector2(GameWorld.Instance.Rnd.Next(540, 570), GameWorld.Instance.Rnd.Next(500, 550));
+                Thread.Sleep(2000);
+                w.Position = new Vector2(530, 450);
+                sp.Release();
+            }
+            catch(Exception)
+            {
+                sp.Release();
+
+            }
         }
     }
 }

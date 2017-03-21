@@ -133,7 +133,7 @@ namespace GoldMiningString
                         {
                             if (position.Y >= 450)
                             {
-                                Ws.useWs(this);
+                                Wc.useWs(this);
                                 currentAction = Action.UseWsBack;
                             }
                             else
