@@ -283,6 +283,7 @@ namespace GoldMiningString
                     timerThread.Start();
                 }
                 else timerThread.Resume();
+                MediaPlayer.Resume();
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.P) && !isPaused && number > 0)
             {
@@ -293,6 +294,7 @@ namespace GoldMiningString
                 }
                 isPaused = true;
                 timerThread.Suspend();
+                MediaPlayer.Pause();
             }
         }
 
