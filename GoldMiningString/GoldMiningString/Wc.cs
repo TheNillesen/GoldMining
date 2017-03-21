@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace GoldMiningString
 {
-    class Ws : GameObject
+    class Wc : GameObject
     {
         //static Mutex mtx = new Mutex();
         static object thisLock = new object();
 
-        public Ws(Vector2 position, string spriteName, float scale) : base(position, spriteName, scale)
+        public Wc(Vector2 position, string spriteName, float scale) : base(position, spriteName, scale)
         { }
 
         public static void useWs(Worker w)
