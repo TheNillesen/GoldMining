@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GoldMiningString
 {
-    enum Action { WorkRight, WorkLeft, UseWsForward, UseWsBack, UseBankForward, UseBankBack };
+    enum Action { WorkRight, WorkLeft, UseWsForward, UseWsBack, UseBankForward, UseBankBack, CanteenForward, CanteenBack };
 
     class Worker : GameObject
     {
@@ -102,6 +102,10 @@ namespace GoldMiningString
                                 Mine.GetGold1(this);
                                 currentAction = Action.WorkRight;
                             }
+                            else if (position.X > 569 && position.X < 570)
+                            {
+                                currentAction = GameWorld.Instance.Rnd.Next(0, 10) > 1 ? Action.WorkLeft : Action.CanteenForward;
+                            }
                             else
                             {
                                 translation = Vector2.Zero;
@@ -121,7 +125,7 @@ namespace GoldMiningString
                             {
                                 translation = Vector2.Zero;
                                 translation += new Vector2(1, 0);
-                                Thread.Sleep(500 / speed);
+                                Thread.Sleep(10);
                             }
                         }
                         break;
@@ -129,7 +133,6 @@ namespace GoldMiningString
                         {
                             if (position.Y >= 450)
                             {
-                                //Thread.Sleep(1000);
                                 Ws.useWs(this);
                                 currentAction = Action.UseWsBack;
                             }
@@ -137,7 +140,7 @@ namespace GoldMiningString
                             {
                                 translation = Vector2.Zero;
                                 translation += new Vector2(0, 1);
-                                Thread.Sleep(500 / speed);
+                                Thread.Sleep(10);
                             }
                         }
                         break;
@@ -151,40 +154,70 @@ namespace GoldMiningString
                             {
                                 translation = Vector2.Zero;
                                 translation += new Vector2(0, -1);
-                                Thread.Sleep(500 / speed);
+                                Thread.Sleep(10);
                             }
                         }
                         break;
-                    //case Action.UseBankForward:
-                    //    {
-                    //        if (position.Y >= 240)
-                    //        {
-                    //            //Thread.Sleep(1000);
-                    //            Bank.DepositPayment(this);
-                    //            currentAction = Action.UseBankBack;
-                    //        }
-                    //        else
-                    //        {
-                    //            translation = Vector2.Zero;
-                    //            translation += new Vector2(4, 4);
-                    //            Thread.Sleep(500 / speed);
-                    //        }
-                    //    }
-                    //    break;
-                    //case Action.UseBankBack:
-                    //    {
-                    //        if (position.Y <= GameWorld.Instance.Rnd.Next(150, 250))
-                    //        {
-                    //            currentAction = Action.WorkLeft;
-                    //        }
-                    //        else
-                    //        {
-                    //            translation = Vector2.Zero;
-                    //            translation += new Vector2(-4, -4);
-                    //            Thread.Sleep(500 / speed);
-                    //        }
-                    //    }
-                    //    break;
+                    case Action.CanteenForward:
+                        {
+                            if (position.Y >= 450)
+                            {
+                                //Thread.Sleep(1000);
+                                Canteen.UseCanteen(this);
+                                currentAction = Action.CanteenBack;
+                            }
+                            else
+                            {
+                                translation = Vector2.Zero;
+                                translation += new Vector2(0, 1);
+                                Thread.Sleep(10);
+                            }
+                        }
+                        break;
+                    case Action.CanteenBack:
+                        {
+                            if (position.Y <= GameWorld.Instance.Rnd.Next(250, 270))
+                            {
+                                currentAction = Action.WorkLeft;
+                            }
+                            else
+                            {
+                                translation = Vector2.Zero;
+                                translation += new Vector2(0, -1);
+                                Thread.Sleep(10);
+                            }
+                        }
+                        break;
+                        //case Action.UseBankForward:
+                        //    {
+                        //        if (position.Y >= 240)
+                        //        {
+                        //            //Thread.Sleep(1000);
+                        //            Bank.DepositPayment(this);
+                        //            currentAction = Action.UseBankBack;
+                        //        }
+                        //        else
+                        //        {
+                        //            translation = Vector2.Zero;
+                        //            translation += new Vector2(4, 4);
+                        //            Thread.Sleep(500 / speed);
+                        //        }
+                        //    }
+                        //    break;
+                        //case Action.UseBankBack:
+                        //    {
+                        //        if (position.Y <= GameWorld.Instance.Rnd.Next(150, 250))
+                        //        {
+                        //            currentAction = Action.WorkLeft;
+                        //        }
+                        //        else
+                        //        {
+                        //            translation = Vector2.Zero;
+                        //            translation += new Vector2(-4, -4);
+                        //            Thread.Sleep(500 / speed);
+                        //        }
+                        //    }
+                        //    break;
                 }
                 position += translation * speed / 100;
             }
