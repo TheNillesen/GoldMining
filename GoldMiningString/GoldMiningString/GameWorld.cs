@@ -1,8 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Media;
 using System.Threading;
 
 namespace GoldMiningString
@@ -29,7 +34,7 @@ namespace GoldMiningString
         bool firstStart;
         float min, sec;
         bool playGame;
-        static object thisLock;
+        Song backGroundSound;
 
         public static GameWorld Instance
         {
@@ -109,6 +114,10 @@ namespace GoldMiningString
             gameObjects.Add(new Factory(new Vector2(670, 50), "factory", 0.7f));
             gameObjects.Add(new Wc(new Vector2(720, 500), "ws", 0.2f));
             gameObjects.Add(new Canteen(new Vector2(450, 480), "canteen2", 0.5f));
+            this.backGroundSound = Content.Load<Song>("Jazz");
+            MediaPlayer.Play(backGroundSound);
+            MediaPlayer.IsRepeating = true;
+
             // gameObjects.Add(new Bank(new Vector2(200, 400), "bank", 0.9f));
             for (int i = 0; i < 5; i++)
             {
@@ -171,6 +180,17 @@ namespace GoldMiningString
 
             base.Update(gameTime);
         }
+        //public void BackGroundMusic()
+        //{
+        //    while()
+        //    this.backGroundSound = Content.Load<Song>("Jazz");
+        //    MediaPlayer.Play(backGroundSound);
+        //    MediaPlayer.IsRepeating = true;
+
+        
+        //}
+
+
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -264,6 +284,7 @@ namespace GoldMiningString
                     timerThread.Start();
                 }
                 else timerThread.Resume();
+                MediaPlayer.Resume();
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.P) && !isPaused && number > 0)
             {
@@ -277,7 +298,7 @@ namespace GoldMiningString
                 }
                 isPaused = true;
                 timerThread.Suspend();
-
+                MediaPlayer.Pause();
             }
         }
 
