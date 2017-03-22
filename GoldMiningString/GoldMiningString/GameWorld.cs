@@ -29,12 +29,15 @@ namespace GoldMiningString
         Random rnd;
         bool canAddWorker;
         bool canDeleteWorker;
+        bool canByOre;
         bool canRestart;
         bool isPaused;
         bool firstStart;
         float min, sec;
         bool playGame;
         Song backGroundSound;
+        int oresAmount;
+        Texture2D bannedSprite;
 
         public static GameWorld Instance
         {
@@ -79,6 +82,14 @@ namespace GoldMiningString
             }
         }
 
+        public int OreAmounts
+        {
+            get
+            {
+                return oresAmount;
+            }
+        }
+
         private GameWorld()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -104,9 +115,10 @@ namespace GoldMiningString
             number = 0;
             canAddWorker = true;
             canDeleteWorker = true;
+            canByOre = true;
             canRestart = true;
             playGame = true;
-            //thisLock = new object();
+            oresAmount = 3;
             timerThread = new Thread(UpdateTimer);
             timerThread.IsBackground = true;
             gameObjects = new List<GameObject>();
@@ -141,6 +153,7 @@ namespace GoldMiningString
             bFont = Content.Load<SpriteFont>("BFont");
             aFont = Content.Load<SpriteFont>("AFont");
             dFont = Content.Load<SpriteFont>("DFont");
+            bannedSprite= Content.Load<Texture2D>("banned");
             foreach (GameObject go in gameObjects)
             {
                 go.LoadContent(Content);
@@ -173,6 +186,7 @@ namespace GoldMiningString
                 //if (!isPaused)
                   //  UpdateTimer();
                 AddWorker();
+                ByOre();
                 DeleteWorker();
                 StartStop();
             }
@@ -209,10 +223,11 @@ namespace GoldMiningString
             spriteBatch.DrawString(bFont, "Workers: " + number, new Vector2(10, 100), Color.Black);
             spriteBatch.DrawString(bFont, "[A] - to recruit worker", new Vector2(10, 200), Color.Black);
             spriteBatch.DrawString(bFont, "[F] - to fire worker", new Vector2(10, 230), Color.Black);
-            spriteBatch.DrawString(bFont, "[P] - pause", new Vector2(10, 260), Color.Black);
-            spriteBatch.DrawString(bFont, "[S] - start / resume game", new Vector2(10, 280), Color.Black);
-            spriteBatch.DrawString(bFont, "[esc] - exit game", new Vector2(10, 530), Color.Black);
-            spriteBatch.DrawString(bFont, "[R] - restart game", new Vector2(10, 500), Color.Black);
+            spriteBatch.DrawString(bFont, "[O] - to by ore", new Vector2(10, 260), Color.Black);
+            spriteBatch.DrawString(bFont, "[P] - pause", new Vector2(10, 450), Color.Black);
+            spriteBatch.DrawString(bFont, "[S] - start / resume game", new Vector2(10, 480), Color.Black);
+            spriteBatch.DrawString(bFont, "[esc] - exit game", new Vector2(10, 580), Color.Black);
+            spriteBatch.DrawString(bFont, "[R] - restart game", new Vector2(10, 550), Color.Black);
             spriteBatch.DrawString(dFont, string.Format("Time left: {0:00}:{1:00}", min, sec), new Vector2(10, 30), Color.Red);
             if (firstStart)
             {
@@ -223,6 +238,11 @@ namespace GoldMiningString
             }
             if (!playGame)
                 spriteBatch.DrawString(dFont, "GAME OVER!", new Vector2(400, 150), Color.Red);
+            if (oresAmount < 2)
+            spriteBatch.Draw(bannedSprite, new Vector2(205, 140), null, Color.White, 0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 1);
+            if (oresAmount < 3)
+            spriteBatch.Draw(bannedSprite, new Vector2(205, 320), null, Color.White, 0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 1);
+
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -247,6 +267,20 @@ namespace GoldMiningString
             if (Keyboard.GetState().IsKeyUp(Keys.A))
             {
                 canAddWorker = true;
+            }
+
+        }
+        public void ByOre()
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.O) && canByOre && Factory.GoldAmount >= 500 && !isPaused)
+            {
+                Factory.GoldAmount -= 500;
+                canByOre = false;
+
+            }
+            if (Keyboard.GetState().IsKeyUp(Keys.A))
+            {
+                canByOre = true;
             }
 
         }
@@ -370,6 +404,7 @@ namespace GoldMiningString
                 Factory.GoldAmount = 0;
                 canRestart = false;
                 timerThread.Suspend();
+                oresAmount = 1;
             }
             if (Keyboard.GetState().IsKeyUp(Keys.R))
             {

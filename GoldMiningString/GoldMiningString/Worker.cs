@@ -99,8 +99,13 @@ namespace GoldMiningString
                         {
                             if (position.X <= 330)
                             {
-                                //Thread.Sleep(1000);
-                                Mine.GetGold2(this);
+                                int selectedOre = GameWorld.Instance.Rnd.Next(1, GameWorld.Instance.OreAmounts + 1);
+                                if (selectedOre ==1)
+                                    Mine.GetGold1(this);
+                                else if (selectedOre == 2)
+                                    Mine.GetGold2(this);
+                                else if (selectedOre == 3)
+                                    Mine.GetGold3(this);
                                 currentAction = Action.WorkRight;
                             }
                             else if (position.X > 569 && position.X < 570)
