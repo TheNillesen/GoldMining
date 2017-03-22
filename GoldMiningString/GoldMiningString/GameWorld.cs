@@ -106,7 +106,7 @@ namespace GoldMiningString
             canDeleteWorker = true;
             canRestart = true;
             playGame = true;
-            thisLock = new object();
+            //thisLock = new object();
             timerThread = new Thread(UpdateTimer);
             timerThread.IsBackground = true;
             gameObjects = new List<GameObject>();
