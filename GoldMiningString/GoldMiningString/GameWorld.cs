@@ -118,7 +118,7 @@ namespace GoldMiningString
             canByOre = true;
             canRestart = true;
             playGame = true;
-            oresAmount = 3;
+            oresAmount = 1;
             timerThread = new Thread(UpdateTimer);
             timerThread.IsBackground = true;
             gameObjects = new List<GameObject>();
@@ -272,13 +272,14 @@ namespace GoldMiningString
         }
         public void ByOre()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.O) && canByOre && Factory.GoldAmount >= 500 && !isPaused)
+            if (Keyboard.GetState().IsKeyDown(Keys.O) && canByOre && Factory.GoldAmount >= 500 && !isPaused && oresAmount<3)
             {
                 Factory.GoldAmount -= 500;
+                oresAmount++;
                 canByOre = false;
 
             }
-            if (Keyboard.GetState().IsKeyUp(Keys.A))
+            if (Keyboard.GetState().IsKeyUp(Keys.O))
             {
                 canByOre = true;
             }
