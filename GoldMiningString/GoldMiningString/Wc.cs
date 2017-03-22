@@ -16,6 +16,19 @@ namespace GoldMiningString
         public Wc(Vector2 position, string spriteName, float scale) : base(position, spriteName, scale)
         { }
 
+        public static Mutex Mtx
+        {
+            get
+            {
+                return mtx;
+            }
+
+            set
+            {
+                mtx = value;
+            }
+        }
+
         public static void useWs(Worker w)
         {
             try
@@ -29,6 +42,7 @@ namespace GoldMiningString
             }
             catch (Exception)
             {
+
             }
             finally
             {

@@ -13,9 +13,9 @@ namespace GoldMiningString
     {
         static Semaphore sp = new Semaphore(3, 3);
         static Mutex mtx = new Mutex();
-        static object thisLock1 = new object();
-        static object thisLock2 = new object();
-        static object thisLock3 = new object();
+        static object thisLock = new object();
+        //static object thisLock2 = new object();
+        //static object thisLock3 = new object();
 
         public Mine(Vector2 position, string spriteName, float scale) : base(position, spriteName, scale)
         { }
@@ -43,7 +43,7 @@ namespace GoldMiningString
 
         public static void GetGold1(Worker w)
         {
-            lock (thisLock1)
+            lock (thisLock)
             {
                 Thread.Sleep(500);
                 w.Position = new Vector2(270, 260);
@@ -57,7 +57,7 @@ namespace GoldMiningString
 
         public static void GetGold2(Worker w)
         {
-            lock (thisLock2)
+            lock (thisLock)
             {
                 Thread.Sleep(500);
                 w.Position = new Vector2(270, 170);
@@ -68,7 +68,7 @@ namespace GoldMiningString
         }
         public static void GetGold3(Worker w)
         {
-            lock (thisLock3)
+            lock (thisLock)
             {
                 Thread.Sleep(500);
                 w.Position = new Vector2(270, 350);

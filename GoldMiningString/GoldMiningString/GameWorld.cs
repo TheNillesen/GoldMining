@@ -244,13 +244,14 @@ namespace GoldMiningString
                 spriteBatch.DrawString(bFont, "Every worker costs 10$/min", new Vector2(400, 360), Color.Green);
                 spriteBatch.DrawString(bFont, "Have fun and Good luck with this amazing game", new Vector2(400, 390), Color.Green);
             }
-            if (!playGame)
+            if (!playGame && canRestart)
                 spriteBatch.DrawString(dFont, "GAME OVER!", new Vector2(400, 150), Color.Red);
             if (oresAmount < 2)
             spriteBatch.Draw(bannedSprite, new Vector2(205, 140), null, Color.White, 0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 1);
             if (oresAmount < 3)
             spriteBatch.Draw(bannedSprite, new Vector2(205, 320), null, Color.White, 0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 1);
-
+            //if (!canRestart)
+                //spriteBatch.DrawString(dFont, "WATE A MOMENT", new Vector2(400, 150), Color.Red);
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -262,9 +263,10 @@ namespace GoldMiningString
                 number++;
                 GameObject go = new Worker(new Vector2(rnd.Next(900, 1000), rnd.Next(260, 280)), "man", 0.3f, number.ToString());
                 go.LoadContent(Content);
-                (go as Worker).WThread = new Thread((go as Worker).Move);
-                (go as Worker).WThread.IsBackground = true;
-                (go as Worker).WThread.Start();
+                //(go as Worker).WThread = new Thread((go as Worker).Move);
+                //(go as Worker).WThread.IsBackground = true;
+                //(go as Worker).WThread.Start();
+                (go as Worker).Speed = rnd.Next(50, 80);
                 gameObjects.Add(go);
                 
                 //if (Factory.GoldAmount >= 100)
@@ -311,8 +313,16 @@ namespace GoldMiningString
             if (Keyboard.GetState().IsKeyDown(Keys.S) && isPaused && number > 0 && playGame)
             {      
                 isPaused = false;
+                foreach (GameObject go in gameObjects)
+                {
+                    if (go is Worker)
+                    {
+                        (go as Worker).Speed = rnd.Next(50, 80);
+                    }
+                }
                 if (firstStart)
                 {
+                    /*
                     foreach (GameObject go in gameObjects)
                     {
                         if (go is Worker)
@@ -321,21 +331,11 @@ namespace GoldMiningString
                             (go as Worker).WThread.IsBackground = true;
                             (go as Worker).WThread.Start();
                         }
-                    }
+                    }*/
                     firstStart = false;
                     timerThread.Start();
                 }
-                else
-                {
-                    foreach (GameObject go in gameObjects)
-                    {
-                        if (go is Worker)
-                        {
-                            (go as Worker).Speed = rnd.Next(50, 80);
-                        }
-                    }
-                    timerThread.Resume();
-                }
+                else timerThread.Resume();
                     
                 MediaPlayer.Resume();
             }
@@ -393,8 +393,6 @@ namespace GoldMiningString
                     if (go is Worker)
                     {
                         (go as Worker).Speed = 0;
-                        //(go as Worker).WThread.Abort();
-                        //(go as Worker).WThread.Join();
                     }
                 }
                 isPaused = true;
@@ -406,20 +404,21 @@ namespace GoldMiningString
         {
             if (Keyboard.GetState().IsKeyDown(Keys.R) && canRestart && !firstStart)
             {
+                canRestart = false;
                 if (number > 0)
                 {
+                    /*
                     foreach (GameObject go in gameObjects)
                     {
                         if (go is Worker)
                         {
                             (go as Worker).Speed = 0;
                         }
-                    }
-                    Thread.Sleep(5000);
+                    }*/
                     while (number > 0)
                     {
                         (gameObjects[gameObjects.Count - 1] as Worker).WThread.Abort();
-                        (gameObjects[gameObjects.Count - 1] as Worker).WThread.Join();
+                        //(gameObjects[gameObjects.Count - 1] as Worker).WThread.Join();
                         gameObjects.RemoveAt(gameObjects.Count - 1);
                         number--;
                     }
@@ -439,7 +438,7 @@ namespace GoldMiningString
                 min = 15;
                 sec = 0;
                 Factory.GoldAmount = 0;
-                canRestart = false;
+                
                 timerThread.Suspend();
                 oresAmount = 1;
             }
