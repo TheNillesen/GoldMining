@@ -126,7 +126,7 @@ namespace GoldMiningString
             canByOre = true;
             canRestart = true;
             playGame = true;
-            oresAmount = 3;
+            oresAmount = 1;
             timerThread = new Thread(UpdateTimer);
             timerThread.IsBackground = true;
             gameObjects = new List<GameObject>();
