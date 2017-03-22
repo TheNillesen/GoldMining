@@ -34,7 +34,7 @@ namespace GoldMiningString
         bool isPaused;
         bool firstStart;
         float min, sec;
-        bool playGame;
+        bool playGame;  
         Song backGroundSound;
         int oresAmount;
         Texture2D bannedSprite;
@@ -118,7 +118,7 @@ namespace GoldMiningString
             canByOre = true;
             canRestart = true;
             playGame = true;
-            oresAmount = 1;
+            oresAmount = 3;
             timerThread = new Thread(UpdateTimer);
             timerThread.IsBackground = true;
             gameObjects = new List<GameObject>();
@@ -272,14 +272,13 @@ namespace GoldMiningString
         }
         public void ByOre()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.O) && canByOre && Factory.GoldAmount >= 500 && !isPaused && oresAmount<3)
+            if (Keyboard.GetState().IsKeyDown(Keys.O) && canByOre && Factory.GoldAmount >= 500 && !isPaused)
             {
                 Factory.GoldAmount -= 500;
-                oresAmount++;
                 canByOre = false;
 
             }
-            if (Keyboard.GetState().IsKeyUp(Keys.O))
+            if (Keyboard.GetState().IsKeyUp(Keys.A))
             {
                 canByOre = true;
             }
