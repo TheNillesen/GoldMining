@@ -76,10 +76,11 @@ namespace GoldMiningString
             this.label = label;
             currentAction = Action.WorkLeft;
             goldAmount = 0;
-            speed = GameWorld.Instance.Rnd.Next(50, 80);
-            //wThread = new Thread(Move);
-            //wThread.IsBackground = true;
-            //wThread.Start();
+            speed = 0;
+            //speed = GameWorld.Instance.Rnd.Next(50, 80);
+            wThread = new Thread(Move);
+            wThread.IsBackground = true;
+            wThread.Start();
         }
 
         /// <summary>
@@ -105,7 +106,7 @@ namespace GoldMiningString
                 {
                     case Action.WorkLeft:
                         {
-                            if (position.X <= 330 && GameWorld.Instance.PlayGame)
+                            if (position.X <= 330)
                             {
                                 int selectedOre = GameWorld.Instance.Rnd.Next(1, GameWorld.Instance.OreAmounts + 1);
                                 if (selectedOre ==1)
@@ -130,7 +131,7 @@ namespace GoldMiningString
                         break;
                     case Action.WorkRight:
                         {
-                            if (position.X >= 750 && GameWorld.Instance.PlayGame)
+                            if (position.X >= 750)
                             {
                                 Factory.ReleaseGold(this);
                                 currentAction = GameWorld.Instance.Rnd.Next(0, 10) > 3 ? Action.WorkLeft : Action.UseWsForward;

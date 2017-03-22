@@ -10,10 +10,23 @@ namespace GoldMiningString
 {
     class Canteen : GameObject
     {
-        static Semaphore sp = new Semaphore(3, 3);
+        static Semaphore sp = new Semaphore(3, 4);
 
         public Canteen(Vector2 position, string spriteName, float scale) : base(position, spriteName, scale)
         { }
+
+        public static Semaphore Sp
+        {
+            get
+            {
+                return sp;
+            }
+
+            set
+            {
+                sp = value;
+            }
+        }
 
         public static void UseCanteen(Worker w)
         {
@@ -24,9 +37,13 @@ namespace GoldMiningString
                 w.Position = new Vector2(GameWorld.Instance.Rnd.Next(540, 570), GameWorld.Instance.Rnd.Next(500, 550));
                 Thread.Sleep(4000);
                 w.Position = new Vector2(530, 450);
-                sp.Release();
+               // sp.Release();
             }
             catch (Exception)
+            {
+               // sp.Release();
+            }
+            finally
             {
                 sp.Release();
             }
