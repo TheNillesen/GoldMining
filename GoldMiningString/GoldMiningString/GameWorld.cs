@@ -90,6 +90,14 @@ namespace GoldMiningString
             }
         }
 
+        public bool PlayGame
+        {
+            get
+            {
+                return playGame;
+            }
+        }
+
         private GameWorld()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -302,27 +310,39 @@ namespace GoldMiningString
         public void StartStop()
         {
             if (Keyboard.GetState().IsKeyDown(Keys.S) && isPaused && number > 0 && playGame)
-            {
-                foreach (GameObject go in gameObjects)
-                {
-                    if (go is Worker)
-                    {
-                        (go as Worker).WThread = new Thread((go as Worker).Move);
-                        (go as Worker).WThread.IsBackground = true;
-                        (go as Worker).WThread.Start();
-                    }
-                }
+            {      
                 isPaused = false;
                 if (firstStart)
                 {
+                    foreach (GameObject go in gameObjects)
+                    {
+                        if (go is Worker)
+                        {
+                            (go as Worker).WThread = new Thread((go as Worker).Move);
+                            (go as Worker).WThread.IsBackground = true;
+                            (go as Worker).WThread.Start();
+                        }
+                    }
                     firstStart = false;
                     timerThread.Start();
                 }
-                else timerThread.Resume();
+                else
+                {
+                    foreach (GameObject go in gameObjects)
+                    {
+                        if (go is Worker)
+                        {
+                            (go as Worker).Speed = rnd.Next(50, 80);
+                        }
+                    }
+                    timerThread.Resume();
+                }
+                    
                 MediaPlayer.Resume();
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.P) && !isPaused && number > 0)
             {
+                /*
                 foreach (GameObject go in gameObjects)
                 {
                     if (go is Worker)
@@ -330,8 +350,16 @@ namespace GoldMiningString
                         (go as Worker).WThread.Abort();
                         (go as Worker).WThread.Join();
                     }
+                }*/
+                foreach (GameObject go in gameObjects)
+                {
+                    if (go is Worker)
+                    {
+                        (go as Worker).Speed = 0;
+                    }
                 }
-                isPaused = true;
+
+               isPaused = true;
                 timerThread.Suspend();
                 MediaPlayer.Pause();
             }
@@ -365,8 +393,9 @@ namespace GoldMiningString
                 {
                     if (go is Worker)
                     {
-                        (go as Worker).WThread.Abort();
-                        (go as Worker).WThread.Join();
+                        (go as Worker).Speed = 0;
+                        //(go as Worker).WThread.Abort();
+                        //(go as Worker).WThread.Join();
                     }
                 }
                 isPaused = true;
@@ -380,6 +409,14 @@ namespace GoldMiningString
             {
                 if (number > 0)
                 {
+                    foreach (GameObject go in gameObjects)
+                    {
+                        if (go is Worker)
+                        {
+                            (go as Worker).Speed = 0;
+                        }
+                    }
+                    Thread.Sleep(5000);
                     while (number > 0)
                     {
                         (gameObjects[gameObjects.Count - 1] as Worker).WThread.Abort();

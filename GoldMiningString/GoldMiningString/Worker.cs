@@ -60,6 +60,14 @@ namespace GoldMiningString
             }
         }
 
+        public int Speed
+        {
+            set
+            {
+                speed = value;
+            }
+        }
+
         /// <summary>
         /// The GameObject's constructor
         /// </summary>
@@ -97,7 +105,7 @@ namespace GoldMiningString
                 {
                     case Action.WorkLeft:
                         {
-                            if (position.X <= 330)
+                            if (position.X <= 330 && GameWorld.Instance.PlayGame)
                             {
                                 int selectedOre = GameWorld.Instance.Rnd.Next(1, GameWorld.Instance.OreAmounts + 1);
                                 if (selectedOre ==1)
@@ -122,7 +130,7 @@ namespace GoldMiningString
                         break;
                     case Action.WorkRight:
                         {
-                            if (position.X >= 750)
+                            if (position.X >= 750 && GameWorld.Instance.PlayGame)
                             {
                                 Factory.ReleaseGold(this);
                                 currentAction = GameWorld.Instance.Rnd.Next(0, 10) > 3 ? Action.WorkLeft : Action.UseWsForward;
