@@ -85,6 +85,7 @@ namespace GoldMiningString
             // spriteBatch.DrawString(GameWorld.Instance.BFont, speed.ToString(), new Vector2(position.X - 10, position.Y), Color.DarkBlue);
             base.Draw(spriteBatch);
         }
+
         public void Move()
         {
 
@@ -131,7 +132,7 @@ namespace GoldMiningString
                         break;
                     case Action.UseWsForward:
                         {
-                            if (position.Y >= 450)
+                            if (position.Y >= 460)
                             {
                                 Wc.useWs(this);
                                 currentAction = Action.UseWsBack;

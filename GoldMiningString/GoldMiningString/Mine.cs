@@ -18,6 +18,13 @@ namespace GoldMiningString
         public Mine(Vector2 position, string spriteName, float scale) : base(position, spriteName, scale)
         { }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(sprite, new Vector2(200, 150), null, Color.White, 0f, new Vector2(0, 0), scale, SpriteEffects.None, 1);
+            spriteBatch.Draw(sprite, new Vector2(200, 330), null, Color.White, 0f, new Vector2(0, 0), scale, SpriteEffects.None, 1);
+            base.Draw(spriteBatch);
+        }
+
         // Semaphore
         public static void GetGold1(Worker w)
         {

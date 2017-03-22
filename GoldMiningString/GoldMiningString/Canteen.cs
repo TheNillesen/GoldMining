@@ -22,7 +22,7 @@ namespace GoldMiningString
                 sp.WaitOne();
                 Thread.Sleep(500);
                 w.Position = new Vector2(GameWorld.Instance.Rnd.Next(540, 570), GameWorld.Instance.Rnd.Next(500, 550));
-                Thread.Sleep(2000);
+                Thread.Sleep(4000);
                 w.Position = new Vector2(530, 450);
                 sp.Release();
             }

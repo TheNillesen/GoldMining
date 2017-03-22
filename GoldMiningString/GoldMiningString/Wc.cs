@@ -10,23 +10,33 @@ namespace GoldMiningString
 {
     class Wc : GameObject
     {
-        //static Mutex mtx = new Mutex();
-        static object thisLock = new object();
+        static Mutex mtx = new Mutex();
+        //static object thisLock = new object();
 
         public Wc(Vector2 position, string spriteName, float scale) : base(position, spriteName, scale)
         { }
 
         public static void useWs(Worker w)
         {
+            try
+            {
+                mtx.WaitOne();
+                Thread.Sleep(500);
+                w.Position = new Vector2(w.Position.X, 510);
+                Thread.Sleep(2000);
+                w.Position = new Vector2(w.Position.X - 15, w.Position.Y - 60);
+                //mtx.ReleaseMutex();
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                mtx.ReleaseMutex();
+            }
+
             /*
-            mtx.WaitOne();
-            Thread.Sleep(500);
-            w.Position = new Vector2(w.Position.X, w.Position.Y + 60);
-            Thread.Sleep(2000);
-            w.Position = new Vector2(w.Position.X - 15, w.Position.Y - 60);
-            mtx.ReleaseMutex();
-            */
-            Monitor.Enter(thisLock);
+           Monitor.Enter(thisLock);
             try
             {
                 Thread.Sleep(500);
@@ -37,7 +47,7 @@ namespace GoldMiningString
             finally
             {
                 Monitor.Exit(thisLock);
-            }
+            }*/
         }
 
 

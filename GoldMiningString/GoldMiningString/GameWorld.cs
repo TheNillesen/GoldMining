@@ -28,8 +28,8 @@ namespace GoldMiningString
         bool isPaused;
         bool firstStart;
         float min, sec;
-        float deltaTime;
         bool playGame;
+        static object thisLock;
 
         public static GameWorld Instance
         {
@@ -101,12 +101,13 @@ namespace GoldMiningString
             canDeleteWorker = true;
             canRestart = true;
             playGame = true;
+            thisLock = new object();
             timerThread = new Thread(UpdateTimer);
             timerThread.IsBackground = true;
             gameObjects = new List<GameObject>();
             gameObjects.Add(new Mine(new Vector2(200, 240), "ore", 0.6f));
             gameObjects.Add(new Factory(new Vector2(670, 50), "factory", 0.7f));
-            gameObjects.Add(new Wc(new Vector2(700, 500), "ws", 0.2f));
+            gameObjects.Add(new Wc(new Vector2(720, 500), "ws", 0.2f));
             gameObjects.Add(new Canteen(new Vector2(450, 480), "canteen2", 0.5f));
             // gameObjects.Add(new Bank(new Vector2(200, 400), "bank", 0.9f));
             for (int i = 0; i < 5; i++)
@@ -157,7 +158,7 @@ namespace GoldMiningString
                 Exit();
 
             // TODO: Add your update logic here
-            deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (playGame)
             {
                 //if (!isPaused)
@@ -210,13 +211,14 @@ namespace GoldMiningString
         {
             if (Keyboard.GetState().IsKeyDown(Keys.A) && canAddWorker && gameObjects.Count <= 40 && Factory.GoldAmount >= 0 && !isPaused)
             {
+                number++;
                 GameObject go = new Worker(new Vector2(rnd.Next(900, 1000), rnd.Next(260, 280)), "man", 0.3f, number.ToString());
                 go.LoadContent(Content);
                 (go as Worker).WThread = new Thread((go as Worker).Move);
                 (go as Worker).WThread.IsBackground = true;
                 (go as Worker).WThread.Start();
                 gameObjects.Add(go);
-                number++;
+                
                 //if (Factory.GoldAmount >= 100)
                 //Factory.GoldAmount -= 100;
                 canAddWorker = false;
@@ -268,10 +270,14 @@ namespace GoldMiningString
                 foreach (GameObject go in gameObjects)
                 {
                     if (go is Worker)
+                    {
                         (go as Worker).WThread.Abort();
+                        (go as Worker).WThread.Join();
+                    }
                 }
                 isPaused = true;
                 timerThread.Suspend();
+
             }
         }
 
@@ -302,7 +308,10 @@ namespace GoldMiningString
                 foreach (GameObject go in gameObjects)
                 {
                     if (go is Worker)
+                    {
                         (go as Worker).WThread.Abort();
+                        (go as Worker).WThread.Join();
+                    }
                 }
                 isPaused = true;
                 playGame = false;
@@ -315,23 +324,15 @@ namespace GoldMiningString
             {
                 if (number > 0)
                 {
-                    /*
-                    foreach (GameObject go in gameObjects)
-                    {
-                        if (go is Worker)
-                        {
-                            (go as Worker).WThread.Abort();
-                            gameObjects.Remove(go);
-                        }
-                    }*/
-                   while (number > 0)
+                    while (number > 0)
                     {
                         (gameObjects[gameObjects.Count - 1] as Worker).WThread.Abort();
+                        (gameObjects[gameObjects.Count - 1] as Worker).WThread.Join();
                         gameObjects.RemoveAt(gameObjects.Count - 1);
                         number--;
                     }
                 }
-                //number = 0;
+                
                 for (int i = 0; i < 5; i++)
                 {
                     number++;

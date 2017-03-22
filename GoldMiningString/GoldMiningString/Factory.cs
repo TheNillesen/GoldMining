@@ -34,20 +34,42 @@ namespace GoldMiningString
 
         public static void ReleaseGold(Worker w)
         {
+            Monitor.Enter(thisLock);
             try
             {
-                mtx.WaitOne();
+                Thread.Sleep(500);
                 w.Position = new Vector2(770, 200);
                 Thread.Sleep(2000);
                 goldAmount += w.GoldAmount;
                 w.GoldAmount = 0;
-                w.Position = new Vector2(740, GameWorld.Instance.Rnd.Next(240, 270));
-                mtx.ReleaseMutex();
+                w.Position = new Vector2(750, GameWorld.Instance.Rnd.Next(260, 280));
+            }
+            finally
+            {
+                Monitor.Exit(thisLock);
+            }
+
+            /*
+            try
+            {
+                mtx.WaitOne();
+                Thread.Sleep(500);
+                w.Position = new Vector2(770, 200);
+                Thread.Sleep(2000);
+                goldAmount += w.GoldAmount;
+                w.GoldAmount = 0;
+                w.Position = new Vector2(750, GameWorld.Instance.Rnd.Next(260, 280));
+                //mtx.ReleaseMutex();
             }
             catch (Exception)
             {
-                mtx.ReleaseMutex();
+                //mtx.Dispose();
             }
+            finally
+            {
+                mtx.ReleaseMutex();
+            }*/
+
 
             /*
             lock (thisLock)
@@ -68,7 +90,7 @@ namespace GoldMiningString
         /// <param name="spriteBatch">The spritebatch from our GameWorld</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(GameWorld.Instance.BFont, "$ " + goldAmount.ToString(), new Vector2(position.X, position.Y + 5), Color.DarkBlue);
+            spriteBatch.DrawString(GameWorld.Instance.BFont, "Balance,$: " + goldAmount.ToString(), new Vector2(position.X - 60, position.Y - 15), Color.DarkBlue);
             base.Draw(spriteBatch);
         }
     }
