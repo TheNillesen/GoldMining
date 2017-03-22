@@ -46,7 +46,7 @@ namespace GoldMiningString
             lock (thisLock1)
             {
                 Thread.Sleep(500);
-                w.Position = new Vector2(270, w.Position.Y);
+                w.Position = new Vector2(270, 260);
                 w.GoldAmount = GameWorld.Instance.Rnd.Next(10, 30);
                 Thread.Sleep(2000);
                 w.Position = new Vector2(w.Position.X + 60, GameWorld.Instance.Rnd.Next(230,250));
@@ -60,7 +60,7 @@ namespace GoldMiningString
             lock (thisLock2)
             {
                 Thread.Sleep(500);
-                w.Position = new Vector2(270, w.Position.Y-100);
+                w.Position = new Vector2(270, 170);
                 w.GoldAmount = GameWorld.Instance.Rnd.Next(10, 30);
                 Thread.Sleep(2000);
                 w.Position = new Vector2(w.Position.X + 60, GameWorld.Instance.Rnd.Next(230, 250));
@@ -71,7 +71,7 @@ namespace GoldMiningString
             lock (thisLock3)
             {
                 Thread.Sleep(500);
-                w.Position = new Vector2(270, w.Position.Y +80);
+                w.Position = new Vector2(270, 350);
                 w.GoldAmount = GameWorld.Instance.Rnd.Next(10, 30);
                 Thread.Sleep(2000);
                 w.Position = new Vector2(w.Position.X + 60, GameWorld.Instance.Rnd.Next(230, 250));

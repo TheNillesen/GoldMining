@@ -130,7 +130,7 @@ namespace GoldMiningString
                         break;
                     case Action.WorkRight:
                         {
-                            if (position.X >= 750 && GameWorld.Instance.PlayGame)
+                            if (position.X >= 750)
                             {
                                 Factory.ReleaseGold(this);
                                 currentAction = GameWorld.Instance.Rnd.Next(0, 10) > 3 ? Action.WorkLeft : Action.UseWsForward;
