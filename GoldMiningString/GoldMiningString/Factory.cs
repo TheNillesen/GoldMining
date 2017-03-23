@@ -11,7 +11,7 @@ namespace GoldMiningString
 {
     class Factory : GameObject
     {
-        static object thisLock = new object();
+        static object thisLock = new object(); // Object that is going to be locked
         static int goldAmount;
         static Mutex mtx = new Mutex();
 
@@ -37,6 +37,8 @@ namespace GoldMiningString
             Monitor.Enter(thisLock);
             try
             {
+                while (w.Speed == 0)
+                { }
                 Thread.Sleep(500);
                 w.Position = new Vector2(770, 200);
                 Thread.Sleep(2000);

@@ -9,6 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GoldMiningString
 {
+    /// <summary>
+    /// Represents the GameObject
+    /// </summary>
     abstract class GameObject
     {
         /// <summary>
@@ -20,7 +23,15 @@ namespace GoldMiningString
         /// The GameObject's sprite
         /// </summary>
         protected Texture2D sprite;
+
+        /// <summary>
+        /// The GamObject's spritename
+        /// </summary>
         protected string spriteName;
+
+        /// <summary>
+        /// The GameObject' scale
+        /// </summary>
         protected float scale;
 
 
@@ -40,13 +51,8 @@ namespace GoldMiningString
         /// <param name="content">The Content form the GameWorld</param>
         public virtual void LoadContent(ContentManager content)
         {
-            //Loads the Hero.png into the sprite variable
+            //Loads the sprite variable
             sprite = content.Load<Texture2D>(spriteName);
-        }
-
-        public virtual void Update()
-        {
-            //Update is left blank, we don't need it atm.
         }
 
         /// <summary>
@@ -56,8 +62,8 @@ namespace GoldMiningString
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             //Draws the GameObject by using the sprite and the position
-            // spriteBatch.Draw(sprite, position, Color.White);
             spriteBatch.Draw(sprite, position, null, Color.White, 0f, new Vector2(0, 0), scale, SpriteEffects.None, 1);
+            // spriteBatch.Draw(sprite, position, Color.White);
         }
     }
 }

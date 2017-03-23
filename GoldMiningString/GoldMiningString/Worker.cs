@@ -12,14 +12,20 @@ namespace GoldMiningString
 {
     enum Action { WorkRight, WorkLeft, UseWsForward, UseWsBack, UseBankForward, UseBankBack, CanteenForward, CanteenBack };
 
+    /// <summary>
+    /// Represents Worker
+    /// </summary>
     class Worker : GameObject
     {
-        private string label;
-        Vector2 translation;
-        Thread wThread;
-        int speed;
-        int goldAmount;
-        Action currentAction;
+        /// <summary>
+        
+        /// </summary>
+        private string label; // Worker's current number
+        Vector2 translation; // Worker's translation
+        Thread wThread; // Worker's thread
+        int speed; // Worker's speed
+        int goldAmount; // Current gold amount
+        Action currentAction; // Worker's current action
 
         public Vector2 Position
         {
@@ -62,11 +68,17 @@ namespace GoldMiningString
 
         public int Speed
         {
+            get
+            {
+                return speed;
+            }
+
             set
             {
                 speed = value;
             }
         }
+
 
         /// <summary>
         /// The GameObject's constructor
@@ -78,13 +90,13 @@ namespace GoldMiningString
             goldAmount = 0;
             speed = 0;
             //speed = GameWorld.Instance.Rnd.Next(50, 80);
-            wThread = new Thread(Move);
-            wThread.IsBackground = true;
-            wThread.Start();
+            wThread = new Thread(Move); // Initializes the thread, which uses the method Move
+            wThread.IsBackground = true; // Sets thrad as background
+            wThread.Start(); // Starts thread
         }
 
         /// <summary>
-        /// Draws the GameObject
+        /// Draws two Ores more
         /// </summary>
         /// <param name="spriteBatch">The spritebatch from our GameWorld</param>
         public override void Draw(SpriteBatch spriteBatch)
@@ -95,6 +107,9 @@ namespace GoldMiningString
             base.Draw(spriteBatch);
         }
 
+        /// <summary>
+        /// Worker's funktionaity
+        /// </summary>
         public void Move()
         {
 

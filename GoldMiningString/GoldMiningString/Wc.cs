@@ -8,31 +8,33 @@ using System.Threading.Tasks;
 
 namespace GoldMiningString
 {
+    /// <summary>
+    /// Represents the Ws
+    /// </summary>
     class Wc : GameObject
     {
         static Mutex mtx = new Mutex();
         //static object thisLock = new object();
 
+        /// <summary>
+        /// The Ws's constructor
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="spriteName"></param>
+        /// <param name="scale"></param>
         public Wc(Vector2 position, string spriteName, float scale) : base(position, spriteName, scale)
         { }
 
-        public static Mutex Mtx
-        {
-            get
-            {
-                return mtx;
-            }
-
-            set
-            {
-                mtx = value;
-            }
-        }
-
+        /// <summary>
+        /// Functionlity, which has to be performd by entered Worker's threads
+        /// </summary>
+        /// <param name="w"></param>
         public static void useWs(Worker w)
         {
             try
             {
+                while (w.Speed == 0)
+                { }
                 mtx.WaitOne();
                 Thread.Sleep(500);
                 w.Position = new Vector2(w.Position.X, 510);
