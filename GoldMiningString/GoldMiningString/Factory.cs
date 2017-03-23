@@ -42,7 +42,7 @@ namespace GoldMiningString
         /// <param name="scale"></param>
         public Factory(Vector2 position, string spriteName, float scale) : base(position, spriteName, scale)
         {
-            goldAmount = 4000; // Sets Factory's balance to 0
+            goldAmount = 0; // Sets Factory's balance to 0
         }
 
         /// <summary>

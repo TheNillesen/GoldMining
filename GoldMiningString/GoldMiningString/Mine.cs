@@ -76,8 +76,8 @@ namespace GoldMiningString
                 while(w.Speed == 0) { } // Suspends Worker's motion if the game is paused
                 Thread.Sleep(500); // Thread sleeps 0.5 second
                 w.Position = new Vector2(270, 260); // Places the Worker inside into the Mine
+                Thread.Sleep(4000); // Thread sleeps 2 seconds
                 w.GoldAmount = GameWorld.Instance.Rnd.Next(10, 30); // The current Worker gets gold (from 10 to 29)
-                Thread.Sleep(2000); // Thread sleeps 2 seconds
                 w.Position = new Vector2(w.Position.X + 60, GameWorld.Instance.Rnd.Next(230,250)); // Places the Worker outside the Mine
             }
         }
@@ -93,8 +93,8 @@ namespace GoldMiningString
                 while (w.Speed == 0) { } // Suspends Worker's motion if the game is paused
                 Thread.Sleep(500); // Thread sleeps 0.5 second
                 w.Position = new Vector2(270, 170); // Places the Worker inside into the Mine
+                Thread.Sleep(4000); // Thread sleeps 2 seconds
                 w.GoldAmount = GameWorld.Instance.Rnd.Next(10, 30); // The current Worker gets gold (from 10 to 29)
-                Thread.Sleep(2000); // Thread sleeps 2 seconds
                 w.Position = new Vector2(w.Position.X + 60, GameWorld.Instance.Rnd.Next(230, 250)); // Places the Worker outside the Mine
             }
         }
@@ -110,8 +110,8 @@ namespace GoldMiningString
                 while (w.Speed == 0) { } // Suspends Worker's motion if the game is paused
                 Thread.Sleep(500); // Thread sleeps 0.5 second
                 w.Position = new Vector2(270, 350); // Places the Worker inside into the Mine
-                w.GoldAmount = GameWorld.Instance.Rnd.Next(10, 30); // The current Worker gets gold (from 10 to 29)
-                Thread.Sleep(2000); // Thread sleeps 2 seconds
+                Thread.Sleep(4000); // Thread sleeps 2 seconds
+                w.GoldAmount = GameWorld.Instance.Rnd.Next(10, 30); // The current Worker gets gold (from 10 to 29)    
                 w.Position = new Vector2(w.Position.X + 60, GameWorld.Instance.Rnd.Next(230, 250)); // Places the Worker outside the Mine
             }
         }

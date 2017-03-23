@@ -216,9 +216,9 @@ namespace GoldMiningString
                 go.Draw(spriteBatch);
             }
             spriteBatch.DrawString(bFont, "Workers: " + number, new Vector2(10, 100), Color.Black); // draws Worker object's amount
-            spriteBatch.DrawString(bFont, "[A] - to recruit worker", new Vector2(10, 200), Color.Black);
-            spriteBatch.DrawString(bFont, "[F] - to fire worker", new Vector2(10, 230), Color.Black);
-            spriteBatch.DrawString(bFont, "[O] - to by ore", new Vector2(10, 260), Color.Black);
+            spriteBatch.DrawString(bFont, "[A] - recruit worker (100$)", new Vector2(10, 200), Color.Black);
+            spriteBatch.DrawString(bFont, "[F] - fire worker", new Vector2(10, 230), Color.Black);
+            spriteBatch.DrawString(bFont, "[O] - by ore (500$)", new Vector2(10, 260), Color.Black);
             spriteBatch.DrawString(bFont, "[P] - pause", new Vector2(10, 450), Color.Black);
             spriteBatch.DrawString(bFont, "[S] - start / resume game", new Vector2(10, 480), Color.Black);
             spriteBatch.DrawString(bFont, "[esc] - exit game", new Vector2(10, 580), Color.Black);
@@ -226,9 +226,9 @@ namespace GoldMiningString
             spriteBatch.DrawString(dFont, string.Format("Time left: {0:00}:{1:00}", min, sec), new Vector2(10, 30), Color.Red);
             if (firstStart)
             {
-                spriteBatch.DrawString(bFont, "Buy workers and take care about the factory", new Vector2(400, 300), Color.Green);
-                spriteBatch.DrawString(bFont, "To buy a worker costs 100$", new Vector2(400, 330), Color.Green);
-                spriteBatch.DrawString(bFont, "Every worker costs 10$/min", new Vector2(400, 360), Color.Green);
+                spriteBatch.DrawString(bFont, "Take care about the factory", new Vector2(400, 300), Color.Green);
+                spriteBatch.DrawString(bFont, "Buy workers and ores", new Vector2(400, 330), Color.Green);
+                spriteBatch.DrawString(bFont, "Remember, every worker costs 10$/min", new Vector2(400, 360), Color.Green);
                 spriteBatch.DrawString(bFont, "Have fun and Good luck with this amazing game", new Vector2(400, 390), Color.Green);
             }
             if (!playGame && canRestart)
