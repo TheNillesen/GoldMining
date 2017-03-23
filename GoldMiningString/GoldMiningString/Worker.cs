@@ -10,16 +10,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GoldMiningString
 {
+    // Possible Worker's actions in the Game
     enum Action { WorkRight, WorkLeft, UseWsForward, UseWsBack, UseBankForward, UseBankBack, CanteenForward, CanteenBack };
 
     /// <summary>
-    /// Represents Worker
+    /// Represents the Worker
     /// </summary>
     class Worker : GameObject
     {
-        /// <summary>
-        
-        /// </summary>
         private string label; // Worker's current number
         Vector2 translation; // Worker's translation
         Thread wThread; // Worker's thread
@@ -119,105 +117,122 @@ namespace GoldMiningString
             {
                 switch (currentAction)
                 {
+                    // Worker's motion on direction from the Factory to the Mine
                     case Action.WorkLeft:
                         {
                             if (position.X <= 330)
                             {
+                                // Cheks how many ores can Worker access (from 1 to 3)
                                 int selectedOre = GameWorld.Instance.Rnd.Next(1, GameWorld.Instance.OreAmounts + 1);
                                 if (selectedOre ==1)
-                                    Mine.GetGold1(this);
+                                    Mine.GetGold1(this); // has to be performed if first ore is chosen
                                 else if (selectedOre == 2)
-                                    Mine.GetGold2(this);
+                                    Mine.GetGold2(this); // has to be performed if second ore is chosen
                                 else if (selectedOre == 3)
-                                    Mine.GetGold3(this);
+                                    Mine.GetGold3(this); // has to be performed if third ore is chosen
                                 currentAction = Action.WorkRight;
                             }
                             else if (position.X > 569 && position.X < 570)
                             {
+                                // Worker chooses direction: work or canteen
                                 currentAction = GameWorld.Instance.Rnd.Next(0, 10) > 1 ? Action.WorkLeft : Action.CanteenForward;
                             }
                             else
                             {
+                                // Continues motion 
                                 translation = Vector2.Zero;
                                 translation += new Vector2(-1, 0);
                                 Thread.Sleep(10);
                             }
                         }
                         break;
+                        // Worker's motion on direction from the Mine to the Factory
                     case Action.WorkRight:
                         {
                             if (position.X >= 750)
                             {
-                                Factory.ReleaseGold(this);
+                                Factory.ReleaseGold(this); // has to be performed when Worker comes to the Factory
+                                // Worker chooses direction: work or Ws
                                 currentAction = GameWorld.Instance.Rnd.Next(0, 10) > 3 ? Action.WorkLeft : Action.UseWsForward;
                             }
                             else
                             {
+                                // Continues motion
                                 translation = Vector2.Zero;
                                 translation += new Vector2(1, 0);
                                 Thread.Sleep(10);
                             }
                         }
                         break;
+                    // Worker's motion on direction from the Factory to Ws
                     case Action.UseWsForward:
                         {
                             if (position.Y >= 460)
                             {
-                                Wc.useWs(this);
-                                currentAction = Action.UseWsBack;
+                                Wc.useWs(this); // has to be performed when Worker comes to the Ws
+                                currentAction = Action.UseWsBack; // after Ws Worker has to move back
                             }
                             else
                             {
+                                // Continues motion
                                 translation = Vector2.Zero;
                                 translation += new Vector2(0, 1);
                                 Thread.Sleep(10);
                             }
                         }
                         break;
+                    // Worker's motion on direction from the Ws
                     case Action.UseWsBack:
                         {
+                            // After coming up from the Ws Worker has to continue to work
                             if (position.Y <= GameWorld.Instance.Rnd.Next(250, 270))
                             {
                                 currentAction = Action.WorkLeft;
                             }
                             else
                             {
+                                // Continues motion
                                 translation = Vector2.Zero;
                                 translation += new Vector2(0, -1);
                                 Thread.Sleep(10);
                             }
                         }
                         break;
+                    // Worker's motion on direction to the Canteen
                     case Action.CanteenForward:
                         {
                             if (position.Y >= 450)
                             {
-                                //Thread.Sleep(1000);
-                                Canteen.UseCanteen(this);
-                                currentAction = Action.CanteenBack;
+                                Canteen.UseCanteen(this); // Has to be performed when Worker comes to the Canteen
+                                currentAction = Action.CanteenBack; // After the Canteen Worker has to move back
                             }
                             else
                             {
+                                // Continues motion
                                 translation = Vector2.Zero;
                                 translation += new Vector2(0, 1);
                                 Thread.Sleep(10);
                             }
                         }
                         break;
+                    // Worker's motion on direction from the Canteen
                     case Action.CanteenBack:
                         {
+                            // After coming up from the Canteen Worker has to continue to work
                             if (position.Y <= GameWorld.Instance.Rnd.Next(250, 270))
                             {
                                 currentAction = Action.WorkLeft;
                             }
                             else
                             {
+                                // Continues motion
                                 translation = Vector2.Zero;
                                 translation += new Vector2(0, -1);
                                 Thread.Sleep(10);
                             }
                         }
                         break;
+                        /*
                     case Action.UseBankForward:
                         {
                             if (position.Y >= 240)
@@ -247,7 +262,7 @@ namespace GoldMiningString
                                 Thread.Sleep(500 / speed);
                             }
                         }
-                        break;
+                        break;*/
                 }
                 position += translation * speed / 100;
             }

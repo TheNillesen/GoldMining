@@ -33,22 +33,22 @@ namespace GoldMiningString
         {
             try
             {
-                while (w.Speed == 0)
-                { }
+                while (w.Speed == 0) { } // Suspends Worker's motion if the game is paused
                 sp.WaitOne();
-                Thread.Sleep(500);
-                w.Position = new Vector2(GameWorld.Instance.Rnd.Next(540, 570), GameWorld.Instance.Rnd.Next(500, 550));
-                Thread.Sleep(4000);
-                w.Position = new Vector2(530, 450);
-               // sp.Release();
+                Thread.Sleep(500); // Thread sleeps 0.5 second
+                w.Position = new Vector2(GameWorld.Instance.Rnd.Next(540, 570), GameWorld.Instance.Rnd.Next(500, 550)); // Places the Worker inside into the Ws
+                Thread.Sleep(4000); // Thread sleeps 4 seconds
+                w.Position = new Vector2(530, 450); // Places the Worker outside the Ws
+
+                                                    // sp.Release();
             }
             catch (Exception)
             {
-               // sp.Release();
+               
             }
             finally
             {
-                sp.Release();
+                sp.Release(); // Releases the semaphore
             }
         }
     }

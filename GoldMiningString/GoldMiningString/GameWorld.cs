@@ -117,7 +117,7 @@ namespace GoldMiningString
             canByOre = true;
             canRestart = true;
             playGame = true;
-            oresAmount = 3; // Ore's amount
+            oresAmount = 1; // Ore's amount
             timerThread = new Thread(UpdateTimer); // Initializes game timer thread, which uses the UpdateTimer method
             timerThread.IsBackground = true; // Sets game timer thread as background
             gameObjects = new List<GameObject>();
@@ -126,8 +126,8 @@ namespace GoldMiningString
             gameObjects.Add(new Wc(new Vector2(720, 500), "ws", 0.2f)); // Creats the ws's instance and adds to the gameobject's list
             gameObjects.Add(new Canteen(new Vector2(450, 480), "canteen2", 0.5f)); // Creats the cantineen's instance and adds to the gameobject's list
             // gameObjects.Add(new Bank(new Vector2(200, 400), "bank", 0.9f));
-            backGroundSound = Content.Load<Song>("Jazz");
-            MediaPlayer.Play(backGroundSound);
+            backGroundSound = Content.Load<Song>("Jazz"); // Loads content for music
+            MediaPlayer.Play(backGroundSound); // starts music
             MediaPlayer.IsRepeating = true;
    
             // Creates 5 Worker objects and adds them to the Gameobject's list
@@ -183,8 +183,6 @@ namespace GoldMiningString
             //deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (playGame)
             {
-                //if (!isPaused)
-                  //  UpdateTimer();
                 AddWorker(); // This method checks if necessary to add one Worker's object
                 ByOre(); // This method checks if necessary to add Ore's Worker object
                 DeleteWorker(); // This method checks if necessary to delete one Worker's object
@@ -239,8 +237,7 @@ namespace GoldMiningString
             spriteBatch.Draw(bannedSprite, new Vector2(205, 140), null, Color.White, 0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 1);
             if (oresAmount < 3)
             spriteBatch.Draw(bannedSprite, new Vector2(205, 320), null, Color.White, 0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 1);
-            //if (!canRestart)
-                //spriteBatch.DrawString(dFont, "WATE A MOMENT", new Vector2(400, 150), Color.Red);
+
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -251,20 +248,21 @@ namespace GoldMiningString
         /// </summary>
         public void AddWorker()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.A) && canAddWorker && gameObjects.Count <= 40 && Factory.GoldAmount >= 0 && !isPaused)
+            if (Keyboard.GetState().IsKeyDown(Keys.A) && canAddWorker && gameObjects.Count <= 40 && !isPaused)
             {
-                number++;  // increments Worker object's amount
-                // Creates one Worker object and adds them to the Gameobject's list
-                GameObject go = new Worker(new Vector2(rnd.Next(900, 1000), rnd.Next(260, 280)), "man", 0.3f, number.ToString());
-                go.LoadContent(Content);
-                //(go as Worker).WThread = new Thread((go as Worker).Move);
-                //(go as Worker).WThread.IsBackground = true;
-                //(go as Worker).WThread.Start();
-                (go as Worker).Speed = rnd.Next(50, 80); // Sets  speed to 50-79
-                gameObjects.Add(go); // Adds Worker object to the GameObject's list
-
-                //if (Factory.GoldAmount >= 100) // Checks if enough funds to by Worker
-                //Factory.GoldAmount -= 100; // Decrements Factory's balance by 100
+                    if (Factory.GoldAmount >= 100) // Checks if enough funds to by Worker
+                    {
+                        Factory.GoldAmount -= 100; // Decrements Factory's balance by 100
+                        number++;  // increments Worker object's amount
+                        // Creates one Worker object and adds them to the Gameobject's list
+                        GameObject go = new Worker(new Vector2(rnd.Next(900, 1000), rnd.Next(260, 280)), "man", 0.3f, number.ToString());
+                        go.LoadContent(Content);
+                        //(go as Worker).WThread = new Thread((go as Worker).Move);
+                        //(go as Worker).WThread.IsBackground = true;
+                        //(go as Worker).WThread.Start();
+                        (go as Worker).Speed = rnd.Next(50, 80); // Sets  speed to 50-79
+                        gameObjects.Add(go); // Adds Worker object to the GameObject's list
+                    }
                 canAddWorker = false; // Makes possible to add only one Worker
             }
             // Makes possible to add next Worker
@@ -280,13 +278,15 @@ namespace GoldMiningString
         public void ByOre()
         {
             // Checs if enough funds on Factory's balance
-            if (Keyboard.GetState().IsKeyDown(Keys.O) && canByOre && Factory.GoldAmount >= 500 && !isPaused)
+            if (Keyboard.GetState().IsKeyDown(Keys.O) && canByOre && !isPaused && oresAmount < 3 && Factory.GoldAmount >= 500)
             {
                 Factory.GoldAmount -= 500; // Decrements Factory's balance by 500
-                canByOre = false; // Makes possible to add only one Ore
+                oresAmount++; // Increments Ores amount by 1          
             }
+                canByOre = false; // Makes possible to add only one Ore
+    
             // Makes possible to add next Worker
-            if (Keyboard.GetState().IsKeyUp(Keys.A))
+            if (Keyboard.GetState().IsKeyUp(Keys.O))
             {
                 canByOre = true;
             }
@@ -397,23 +397,23 @@ namespace GoldMiningString
         /// </summary>
         public void CheckFactoryStatus()
         {
-            // If enough funds, Factory's balance decrementes by workers amount * 10
-            if (Factory.GoldAmount >= number * 10)
-                Factory.GoldAmount -= number * 10;
-            else
-            {
-                Factory.GoldAmount = 0; // Sets Factory's balance to 0
-                // Sets all Worker's speed to 0
-                foreach (GameObject go in gameObjects)
+                // If enough funds, Factory's balance decrementes by workers amount * 10
+                if (Factory.GoldAmount >= number * 10)
+                    Factory.GoldAmount -= number * 10;
+                else
                 {
-                    if (go is Worker)
+                    Factory.GoldAmount = 0; // Sets Factory's balance to 0
+                                            // Sets all Worker's speed to 0
+                    foreach (GameObject go in gameObjects)
                     {
-                        (go as Worker).Speed = 0;
+                        if (go is Worker)
+                        {
+                            (go as Worker).Speed = 0;
+                        }
                     }
+                    isPaused = true; // Sets game til pause
+                    playGame = false; // Game over
                 }
-                isPaused = true;
-                playGame = false; // Game over
-            }
         }
 
         /// <summary>
@@ -426,14 +426,6 @@ namespace GoldMiningString
                 canRestart = false; // Makes possible to restart only one time
                 if (number > 0) // Checks if there are Workers in the GameObjects list
                 {
-                    /*
-                    foreach (GameObject go in gameObjects)
-                    {
-                        if (go is Worker)
-                        {
-                            (go as Worker).Speed = 0;
-                        }
-                    }*/
                     // Aborts Worker's threads and remove Workers from the GameObjects list
                     while (number > 0)
                     {
@@ -453,14 +445,14 @@ namespace GoldMiningString
                     //(go as Worker).WThread.IsBackground = true;
                     gameObjects.Add(go);
                 }
-                playGame = true;
+                playGame = true; 
                 isPaused = true;
                 min = 15; // Sets minutes to 15
                 sec = 0; // Sets seconds to 0
                 Factory.GoldAmount = 0; // Sets Factory's balance to 0
                 
                 timerThread.Suspend(); // Suspends Game timer
-                oresAmount = 1; // Gives access only to one Ore
+                oresAmount = 1; // Workers can access only to one Ore
             }
         }
     }

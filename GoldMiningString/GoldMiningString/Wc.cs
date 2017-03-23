@@ -33,13 +33,12 @@ namespace GoldMiningString
         {
             try
             {
-                while (w.Speed == 0)
-                { }
-                mtx.WaitOne();
-                Thread.Sleep(500);
-                w.Position = new Vector2(w.Position.X, 510);
-                Thread.Sleep(2000);
-                w.Position = new Vector2(w.Position.X - 15, w.Position.Y - 60);
+                while (w.Speed == 0) { } // Suspends Worker's motion if the game is paused
+                mtx.WaitOne(); // Only one Worker's thread
+                Thread.Sleep(500); // Thread sleeps 0.5 second
+                w.Position = new Vector2(w.Position.X, 510); // Places the Worker inside into the Ws
+                Thread.Sleep(2000); // Thread sleeps 2 seconds
+                w.Position = new Vector2(w.Position.X - 15, w.Position.Y - 60); // Places the Worker outside the Ws
                 //mtx.ReleaseMutex();
             }
             catch (Exception)
@@ -48,7 +47,7 @@ namespace GoldMiningString
             }
             finally
             {
-                mtx.ReleaseMutex();
+                mtx.ReleaseMutex(); // Releases the mutex
             }
 
             /*
