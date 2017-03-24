@@ -31,13 +31,17 @@ namespace GoldMiningString
         bool canDeleteWorker; // Used for deleting only one worker 
         bool canByOre; // Used to by only one ore
         bool canRestart; // Used for restarting game
+        bool canStartStopMusic; // Used for start and stop music
         bool isPaused; // Used to suspend game
         bool firstStart; // Used when game started first time
+        bool startMusic; // Used to start music
         float min, sec; // Game timer's minutes and seconds
         bool playGame;  // Used when game is running
         Song backGroundSound;
         int oresAmount; // The ores amount
         Texture2D bannedSprite; // The sprite "banned"
+        string musicMode; // music current mode
+        bool playMusic; // used to suspend or resume music
 
         public static GameWorld Instance
         {
@@ -116,8 +120,12 @@ namespace GoldMiningString
             canDeleteWorker = true;
             canByOre = true;
             canRestart = true;
+            canStartStopMusic = true;
             playGame = true;
+            startMusic = true;
+            playMusic = true;
             oresAmount = 1; // Ore's amount
+            musicMode = "on";
             timerThread = new Thread(UpdateTimer); // Initializes game timer thread, which uses the UpdateTimer method
             timerThread.IsBackground = true; // Sets game timer thread as background
             gameObjects = new List<GameObject>();
@@ -125,11 +133,9 @@ namespace GoldMiningString
             gameObjects.Add(new Factory(new Vector2(670, 50), "factory", 0.7f)); // Creats the factory's instance and adds to the gameobject's list
             gameObjects.Add(new Wc(new Vector2(720, 500), "ws", 0.2f)); // Creats the ws's instance and adds to the gameobject's list
             gameObjects.Add(new Canteen(new Vector2(450, 480), "canteen2", 0.5f)); // Creats the cantineen's instance and adds to the gameobject's list
-            // gameObjects.Add(new Bank(new Vector2(200, 400), "bank", 0.9f));
-            backGroundSound = Content.Load<Song>("Jazz"); // Loads content for music
-            MediaPlayer.Play(backGroundSound); // starts music
+            // gameObjects.Add(new Bank(new Vector2(200, 400), "bank", 0.9f));        
             MediaPlayer.IsRepeating = true;
-   
+
             // Creates 5 Worker objects and adds them to the Gameobject's list
             for (int i = 0; i < 5; i++)
             {
@@ -153,7 +159,8 @@ namespace GoldMiningString
             bFont = Content.Load<SpriteFont>("BFont");
             aFont = Content.Load<SpriteFont>("AFont");
             dFont = Content.Load<SpriteFont>("DFont");
-            bannedSprite= Content.Load<Texture2D>("banned");
+            backGroundSound = Content.Load<Song>("Jazz"); // Loads content for music
+            bannedSprite = Content.Load<Texture2D>("banned");
             foreach (GameObject go in gameObjects)
             {
                 go.LoadContent(Content);
@@ -180,7 +187,12 @@ namespace GoldMiningString
                 Exit();
 
             // TODO: Add your update logic here
-            //deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (startMusic)
+            {
+                MediaPlayer.Play(backGroundSound); // starts music
+                startMusic = false; // Makes sure that music starts only one time
+            }
+            StartStopMusic(); // This method checks if necessary to suspend or resum music
             if (playGame)
             {
                 AddWorker(); // This method checks if necessary to add one Worker's object
@@ -215,10 +227,11 @@ namespace GoldMiningString
             {
                 go.Draw(spriteBatch);
             }
-            spriteBatch.DrawString(bFont, "Workers: " + number, new Vector2(10, 100), Color.Black); // draws Worker object's amount
+            spriteBatch.DrawString(dFont, "Workers: " + number, new Vector2(10, 100), Color.DarkGreen); // draws Worker object's amount
             spriteBatch.DrawString(bFont, "[A] - recruit worker (100$)", new Vector2(10, 200), Color.Black);
             spriteBatch.DrawString(bFont, "[F] - fire worker", new Vector2(10, 230), Color.Black);
             spriteBatch.DrawString(bFont, "[O] - by ore (500$)", new Vector2(10, 260), Color.Black);
+            spriteBatch.DrawString(bFont, "[M] - music: " + musicMode, new Vector2(10, 400), Color.Black);
             spriteBatch.DrawString(bFont, "[P] - pause", new Vector2(10, 450), Color.Black);
             spriteBatch.DrawString(bFont, "[S] - start / resume game", new Vector2(10, 480), Color.Black);
             spriteBatch.DrawString(bFont, "[esc] - exit game", new Vector2(10, 580), Color.Black);
@@ -231,12 +244,12 @@ namespace GoldMiningString
                 spriteBatch.DrawString(bFont, "Remember, every worker costs 10$/min", new Vector2(400, 360), Color.Green);
                 spriteBatch.DrawString(bFont, "Have fun and Good luck with this amazing game", new Vector2(400, 390), Color.Green);
             }
-            if (!playGame && canRestart)
+            if (!playGame)
                 spriteBatch.DrawString(dFont, "GAME OVER!", new Vector2(400, 150), Color.Red);
             if (oresAmount < 2)
-            spriteBatch.Draw(bannedSprite, new Vector2(205, 140), null, Color.White, 0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 1);
+                spriteBatch.Draw(bannedSprite, new Vector2(205, 140), null, Color.White, 0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 1);
             if (oresAmount < 3)
-            spriteBatch.Draw(bannedSprite, new Vector2(205, 320), null, Color.White, 0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 1);
+                spriteBatch.Draw(bannedSprite, new Vector2(205, 320), null, Color.White, 0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 1);
 
             spriteBatch.End();
 
@@ -250,19 +263,19 @@ namespace GoldMiningString
         {
             if (Keyboard.GetState().IsKeyDown(Keys.A) && canAddWorker && gameObjects.Count <= 40 && !isPaused)
             {
-                    if (Factory.GoldAmount >= 100) // Checks if enough funds to by Worker
-                    {
-                        Factory.GoldAmount -= 100; // Decrements Factory's balance by 100
-                        number++;  // increments Worker object's amount
-                        // Creates one Worker object and adds them to the Gameobject's list
-                        GameObject go = new Worker(new Vector2(rnd.Next(900, 1000), rnd.Next(260, 280)), "man", 0.3f, number.ToString());
-                        go.LoadContent(Content);
-                        //(go as Worker).WThread = new Thread((go as Worker).Move);
-                        //(go as Worker).WThread.IsBackground = true;
-                        //(go as Worker).WThread.Start();
-                        (go as Worker).Speed = rnd.Next(50, 80); // Sets  speed to 50-79
-                        gameObjects.Add(go); // Adds Worker object to the GameObject's list
-                    }
+                if (Factory.GoldAmount >= 100) // Checks if enough funds to by Worker
+                {
+                    Factory.GoldAmount -= 100; // Decrements Factory's balance by 100
+                    number++;  // increments Worker object's amount
+                               // Creates one Worker object and adds them to the Gameobject's list
+                    GameObject go = new Worker(new Vector2(rnd.Next(900, 1000), rnd.Next(260, 280)), "man", 0.3f, number.ToString());
+                    go.LoadContent(Content);
+                    //(go as Worker).WThread = new Thread((go as Worker).Move);
+                    //(go as Worker).WThread.IsBackground = true;
+                    //(go as Worker).WThread.Start();
+                    (go as Worker).Speed = rnd.Next(50, 80); // Sets  speed to 50-79
+                    gameObjects.Add(go); // Adds Worker object to the GameObject's list
+                }
                 canAddWorker = false; // Makes possible to add only one Worker
             }
             // Makes possible to add next Worker
@@ -283,14 +296,13 @@ namespace GoldMiningString
                 Factory.GoldAmount -= 500; // Decrements Factory's balance by 500
                 oresAmount++; // Increments Ores amount by 1          
             }
-                canByOre = false; // Makes possible to add only one Ore
-    
+            canByOre = false; // Makes possible to add only one Ore
+
             // Makes possible to add next Worker
             if (Keyboard.GetState().IsKeyUp(Keys.O))
             {
                 canByOre = true;
             }
-
         }
 
         /// <summary>
@@ -318,7 +330,7 @@ namespace GoldMiningString
         public void StartStop()
         {
             if (Keyboard.GetState().IsKeyDown(Keys.S) && isPaused && number > 0 && playGame)
-            {      
+            {
                 isPaused = false; // If game is not paused
                 // Sets all Worker's speed to 50-79
                 foreach (GameObject go in gameObjects)
@@ -345,7 +357,6 @@ namespace GoldMiningString
                 }
                 else timerThread.Resume(); // Resumes game timer if it was suspended
                 canRestart = true; // Makes possible to restart game
-                MediaPlayer.Resume(); 
             }
             else if (Keyboard.GetState().IsKeyDown(Keys.P) && !isPaused && number > 0)
             {
@@ -358,7 +369,7 @@ namespace GoldMiningString
                         (go as Worker).WThread.Join();
                     }
                 }*/
-                // Sets all Worker's speed to 50-79
+                // Sets all Worker's speed to 0
                 foreach (GameObject go in gameObjects)
                 {
                     if (go is Worker)
@@ -366,9 +377,8 @@ namespace GoldMiningString
                         (go as Worker).Speed = 0;
                     }
                 }
-               isPaused = true;
+                isPaused = true;
                 timerThread.Suspend(); // Suspends game timer
-                MediaPlayer.Pause();
             }
         }
 
@@ -383,11 +393,29 @@ namespace GoldMiningString
                 sec--; // Decrements seconds by one
                 if (sec < 0)
                 {
-                    if ((min + sec) <= 0) playGame = false; // Game over if time is expired
                     min--; // Decrements minutes by one
-                    sec = 59; // Sets seconds to 59
-                    if (min < 14)
-                        CheckFactoryStatus(); // Checks if enough funds on the Factory's balance to pay for Workers
+                    if (min < 0)
+                    {
+                        min = 0;
+                        sec = 0;
+                        isPaused = true; // Sets game til pause
+                        playGame = false; // Game over
+                        // Sets all Worker's speed to 0
+                        foreach (GameObject go in gameObjects)
+                        {
+                            if (go is Worker)
+                            {
+                                (go as Worker).Speed = 0;
+                            }
+                        }
+                        timerThread.Suspend(); // Suspends game timer
+                    }
+                    else
+                    {
+                        sec = 59; // Sets seconds to 59
+                        if (min < 14)
+                            CheckFactoryStatus(); // Checks if enough funds on the Factory's balance to pay for Workers
+                    }
                 }
             }
         }
@@ -397,23 +425,24 @@ namespace GoldMiningString
         /// </summary>
         public void CheckFactoryStatus()
         {
-                // If enough funds, Factory's balance decrementes by workers amount * 10
-                if (Factory.GoldAmount >= number * 10)
-                    Factory.GoldAmount -= number * 10;
-                else
+            // If enough funds, Factory's balance decrementes by workers amount * 10
+            if (Factory.GoldAmount >= number * 10)
+                Factory.GoldAmount -= number * 10;
+            else
+            {
+                Factory.GoldAmount = 0; // Sets Factory's balance to 0
+                                        // Sets all Worker's speed to 0
+                foreach (GameObject go in gameObjects)
                 {
-                    Factory.GoldAmount = 0; // Sets Factory's balance to 0
-                                            // Sets all Worker's speed to 0
-                    foreach (GameObject go in gameObjects)
+                    if (go is Worker)
                     {
-                        if (go is Worker)
-                        {
-                            (go as Worker).Speed = 0;
-                        }
+                        (go as Worker).Speed = 0;
                     }
-                    isPaused = true; // Sets game til pause
-                    playGame = false; // Game over
                 }
+                isPaused = true; // Sets game til pause
+                playGame = false; // Game over
+                timerThread.Suspend(); // Suspends game timer
+            }
         }
 
         /// <summary>
@@ -445,14 +474,35 @@ namespace GoldMiningString
                     //(go as Worker).WThread.IsBackground = true;
                     gameObjects.Add(go);
                 }
-                playGame = true; 
+                playGame = true;
                 isPaused = true;
                 min = 15; // Sets minutes to 15
                 sec = 0; // Sets seconds to 0
                 Factory.GoldAmount = 0; // Sets Factory's balance to 0
-                
-                timerThread.Suspend(); // Suspends Game timer
                 oresAmount = 1; // Workers can access only to one Ore
+                timerThread.Suspend(); // Suspends Game timer
+            }
+        }
+
+        /// <summary>
+        ///  This method checks if necessary to suspend or resum music
+        /// </summary>
+        public void StartStopMusic()
+        {
+            // Checs if enough funds on Factory's balance
+            if (Keyboard.GetState().IsKeyDown(Keys.M) && canStartStopMusic)
+            {
+                playMusic = !playMusic;
+                musicMode = playMusic ? "on" : "off";
+                if (!playMusic) MediaPlayer.Pause();
+                else MediaPlayer.Resume();
+            }
+            canStartStopMusic = false; // Makes possible to add only one Ore
+
+            // Makes possible to add next Worker
+            if (Keyboard.GetState().IsKeyUp(Keys.M))
+            {
+                canStartStopMusic = true;
             }
         }
     }
