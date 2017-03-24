@@ -34,11 +34,11 @@ namespace GoldMiningString
             try
             {
                 while (w.Speed == 0) { } // Suspends Worker's motion if the game is paused
-                sp.WaitOne();
+                sp.WaitOne(); // only three threads in here
                 Thread.Sleep(500); // Thread sleeps 0.5 second
-                w.Position = new Vector2(GameWorld.Instance.Rnd.Next(540, 570), GameWorld.Instance.Rnd.Next(500, 550)); // Places the Worker inside into the Ws
+                w.Position = new Vector2(GameWorld.Instance.Rnd.Next(540, 570), GameWorld.Instance.Rnd.Next(500, 550)); // Places the Worker inside into the Wc
                 Thread.Sleep(4000); // Thread sleeps 4 seconds
-                w.Position = new Vector2(530, 450); // Places the Worker outside the Ws
+                w.Position = new Vector2(530, 450); // Places the Worker outside the Wc
 
                                                     
             }
