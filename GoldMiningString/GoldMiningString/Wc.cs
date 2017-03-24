@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GoldMiningString
 {
     /// <summary>
-    /// Represents the Ws
+    /// Represents the Wc
     /// </summary>
     class Wc : GameObject
     {
@@ -17,7 +17,7 @@ namespace GoldMiningString
         //static object thisLock = new object();
 
         /// <summary>
-        /// The Ws's constructor
+        /// The Wc's constructor
         /// </summary>
         /// <param name="position"></param>
         /// <param name="spriteName"></param>
@@ -29,14 +29,14 @@ namespace GoldMiningString
         /// Functionlity, which has to be performd by entered Worker's threads
         /// </summary>
         /// <param name="w"></param>
-        public static void useWs(Worker w)
+        public static void useWc(Worker w)
         {
             try
             {
                 while (w.Speed == 0) { } // Suspends Worker's motion if the game is paused
                 mtx.WaitOne(); // Only one Worker's thread
                 Thread.Sleep(500); // Thread sleeps 0.5 second
-                w.Position = new Vector2(w.Position.X, 510); // Places the Worker inside into the Ws
+                w.Position = new Vector2(w.Position.X, 510); // Places the Worker inside into the Wc
                 Thread.Sleep(2000); // Thread sleeps 2 seconds
                 w.Position = new Vector2(w.Position.X - 15, w.Position.Y - 60); // Places the Worker outside the Ws
                 //mtx.ReleaseMutex();

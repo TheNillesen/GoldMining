@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace GoldMiningString
 {
     // Possible Worker's actions in the Game
-    enum Action { WorkRight, WorkLeft, UseWsForward, UseWsBack, UseBankForward, UseBankBack, CanteenForward, CanteenBack };
+    enum Action { WorkRight, WorkLeft, UseWcForward, UseWcBack, UseBankForward, UseBankBack, CanteenForward, CanteenBack };
 
     /// <summary>
     /// Represents the Worker
@@ -153,7 +153,7 @@ namespace GoldMiningString
                             {
                                 Factory.ReleaseGold(this); // has to be performed when Worker comes to the Factory
                                 // Worker chooses direction: work or Ws
-                                currentAction = GameWorld.Instance.Rnd.Next(0, 10) > 3 ? Action.WorkLeft : Action.UseWsForward;
+                                currentAction = GameWorld.Instance.Rnd.Next(0, 10) > 3 ? Action.WorkLeft : Action.UseWcForward;
                             }
                             else
                             {
@@ -165,12 +165,12 @@ namespace GoldMiningString
                         }
                         break;
                     // Worker's motion on direction from the Factory to Ws
-                    case Action.UseWsForward:
+                    case Action.UseWcForward:
                         {
                             if (position.Y >= 460)
                             {
-                                Wc.useWs(this); // has to be performed when Worker comes to the Ws
-                                currentAction = Action.UseWsBack; // after Ws Worker has to move back
+                                Wc.useWc(this); // has to be performed when Worker comes to the Ws
+                                currentAction = Action.UseWcBack; // after Ws Worker has to move back
                             }
                             else
                             {
@@ -182,7 +182,7 @@ namespace GoldMiningString
                         }
                         break;
                     // Worker's motion on direction from the Ws
-                    case Action.UseWsBack:
+                    case Action.UseWcBack:
                         {
                             // After coming up from the Ws Worker has to continue to work
                             if (position.Y <= GameWorld.Instance.Rnd.Next(250, 270))
