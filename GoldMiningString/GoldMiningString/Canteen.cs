@@ -40,7 +40,7 @@ namespace GoldMiningString
                 Thread.Sleep(4000); // Thread sleeps 4 seconds
                 w.Position = new Vector2(530, 450); // Places the Worker outside the Ws
 
-                                                    // sp.Release();
+                                                    
             }
             catch (Exception)
             {
