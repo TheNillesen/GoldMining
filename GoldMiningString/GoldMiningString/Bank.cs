@@ -40,7 +40,7 @@ namespace GoldMiningString
                 Thread.Sleep(500);
 
                 //denne linje forstår jeg ikke
-                w.Position = new Vector2(w.Position.X + 40, w.Position.Y);
+               // w.Position = new Vector2(w.Position.X + 40, w.Position.Y);
 
                 //dette er hvor worker bliver spawnet når de kommer til banken
                 w.Position = new Vector2(250, 450);

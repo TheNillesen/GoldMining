@@ -42,6 +42,7 @@ namespace GoldMiningString
         Texture2D bannedSprite; // The sprite "banned"
         string musicMode; // music current mode
         bool playMusic; // used to suspend or resume music
+        string gameOverMessage;
 
         public static GameWorld Instance
         {
@@ -126,6 +127,7 @@ namespace GoldMiningString
             playMusic = true;
             oresAmount = 1; // Ore's amount
             musicMode = "on";
+            gameOverMessage = "";
             timerThread = new Thread(UpdateTimer); // Initializes game timer thread, which uses the UpdateTimer method
             timerThread.IsBackground = true; // Sets game timer thread as background
             gameObjects = new List<GameObject>();
@@ -228,6 +230,7 @@ namespace GoldMiningString
                 go.Draw(spriteBatch);
             }
             spriteBatch.DrawString(dFont, "Workers: " + number, new Vector2(10, 100), Color.DarkGreen); // draws Worker object's amount
+            spriteBatch.DrawString(bFont, "- every worker costs 10$/min", new Vector2(200, 110), Color.Green);
             spriteBatch.DrawString(bFont, "[A] - recruit worker (100$)", new Vector2(10, 200), Color.Black);
             spriteBatch.DrawString(bFont, "[F] - fire worker", new Vector2(10, 230), Color.Black);
             spriteBatch.DrawString(bFont, "[O] - by ore (500$)", new Vector2(10, 260), Color.Black);
@@ -241,11 +244,13 @@ namespace GoldMiningString
             {
                 spriteBatch.DrawString(bFont, "Take care about the factory", new Vector2(400, 300), Color.Green);
                 spriteBatch.DrawString(bFont, "Buy workers and ores", new Vector2(400, 330), Color.Green);
-                spriteBatch.DrawString(bFont, "Remember, every worker costs 10$/min", new Vector2(400, 360), Color.Green);
-                spriteBatch.DrawString(bFont, "Have fun and Good luck with this amazing game", new Vector2(400, 390), Color.Green);
+                spriteBatch.DrawString(bFont, "Have fun and Good luck with this amazing game", new Vector2(400, 360), Color.Green);
             }
             if (!playGame)
+            {
                 spriteBatch.DrawString(dFont, "GAME OVER!", new Vector2(400, 150), Color.Red);
+                spriteBatch.DrawString(bFont, gameOverMessage, new Vector2(430, 200), Color.Red);
+            }
             if (oresAmount < 2)
                 spriteBatch.Draw(bannedSprite, new Vector2(205, 140), null, Color.White, 0f, new Vector2(0, 0), 0.4f, SpriteEffects.None, 1);
             if (oresAmount < 3)
@@ -408,6 +413,7 @@ namespace GoldMiningString
                                 (go as Worker).Speed = 0;
                             }
                         }
+                        gameOverMessage = "The time is up";
                         timerThread.Suspend(); // Suspends game timer
                     }
                     else
@@ -439,6 +445,7 @@ namespace GoldMiningString
                         (go as Worker).Speed = 0;
                     }
                 }
+                gameOverMessage = "Insufficient funds";
                 isPaused = true; // Sets game til pause
                 playGame = false; // Game over
                 timerThread.Suspend(); // Suspends game timer
@@ -476,6 +483,7 @@ namespace GoldMiningString
                 }
                 playGame = true;
                 isPaused = true;
+                gameOverMessage = "";
                 min = 15; // Sets minutes to 15
                 sec = 0; // Sets seconds to 0
                 Factory.GoldAmount = 0; // Sets Factory's balance to 0
